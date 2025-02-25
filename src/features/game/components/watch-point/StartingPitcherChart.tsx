@@ -1,11 +1,12 @@
-import { GameScore, Pitcher } from '@/features/game';
+import { GameScore } from '@/features/game';
 import { getWatchPointChartData } from '@/features/game/services/calc-rate-watchpoint.service';
 import { cn } from '@/lib/utils';
+import { StartingPitcher } from '../../types/watch-point';
 
 interface StartingPitcherChartProps {
   gameScore: GameScore;
-  homePitcher: Pitcher;
-  visitPitcher: Pitcher;
+  homePitcher: StartingPitcher;
+  visitPitcher: StartingPitcher;
 }
 
 function StartingPitcherChart({

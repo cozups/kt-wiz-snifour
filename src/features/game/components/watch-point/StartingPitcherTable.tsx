@@ -1,12 +1,12 @@
 import { startingPitcherColumns } from '@/constants/columns/starting-pitcher-columns';
 import { DataTable } from '@/features/common';
-import { Pitcher } from '@/features/game';
+import { StartingPitcher } from '../../types/watch-point';
 
 interface StartingPitcherProps {
   homeTeam: string;
   visitTeam: string;
-  homePitcher?: Pitcher;
-  visitPitcher?: Pitcher;
+  homePitcher?: StartingPitcher;
+  visitPitcher?: StartingPitcher;
 }
 
 const StartingPitcherTable = ({

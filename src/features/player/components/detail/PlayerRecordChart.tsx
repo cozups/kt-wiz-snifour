@@ -39,7 +39,11 @@ function PlayerRecordChart({
   );
 
   if (!data) {
-    return <div>데이터가 존재하지 않습니다.</div>;
+    return (
+      <div className="w-full h-72 flex flex-col items-center justify-center">
+        <p>Error: 데이터가 존재하지 않습니다.</p>
+      </div>
+    );
   }
 
   const handleConfig = (dataKey: keyof Config) => {
@@ -105,8 +109,11 @@ function PlayerRecordChart({
       </div>
       {loading && <Skeleton className="w-full h-72" />}
       {!loading && data.length === 0 && (
-        <div className="w-full h-72 flex items-center justify-center">
-          데이터가 존재하지 않습니다.
+        <div className="w-full h-72 flex flex-col items-center justify-center">
+          <p>데이터가 존재하지 않습니다.</p>
+          <p className="text-neutral-400">
+            시즌 시작 전인 경우, 시즌 시작 시 데이터가 업데이트 됩니다.
+          </p>
         </div>
       )}
       {!loading && data.length > 0 && (
