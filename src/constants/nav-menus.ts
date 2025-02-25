@@ -3,9 +3,7 @@ export const navMenus = [
     title: 'KT Wiz',
     sub: [
       { title: 'kt wiz는?', link: '/ktwiz/about' },
-      { title: '구단 BI', link: '/ktwiz/bi/symbol' },
       { title: '회원 정책', link: '/ktwiz/policy/regular' },
-      { title: '월페이퍼', link: '/ktwiz/wallpaper' },
     ],
   },
   {
@@ -19,10 +17,7 @@ export const navMenus = [
   },
   {
     title: 'Game',
-    sub: [
-      { title: '정규리그', link: '/game/regular/schedule' },
-      { title: '퓨처스리그', link: '/game/futures/schedule' },
-    ],
+    sub: [{ title: '정규리그', link: '/game/regular/schedule' }],
   },
   {
     title: 'Player',
@@ -31,7 +26,6 @@ export const navMenus = [
       { title: '투수', link: '/player/pitcher' },
       { title: '타자', link: '/player/catcher' },
       { title: '응원단', link: '/player/cheer' },
-      { title: '응원가', link: '/player/song' },
     ],
   },
   {
@@ -42,16 +36,11 @@ export const navMenus = [
       { title: 'wiz 포토', link: '/media/photos/1' },
       { title: '시구자 정보', link: '/media/firstpitch' },
       { title: '하이라이트', link: '/media/highlight' },
-      { title: 'Live 영상', link: '/media/live/pts' },
     ],
   },
   { title: 'Shop', link: 'https://www.ktwizstore.co.kr/', sub: [] },
   {
     title: '티켓구매',
-    sub: [
-      { title: '티켓예매', link: '/ticket/reservation' },
-      { title: '단체관람', link: '/ticket/group' },
-      { title: '입장 및 좌석 정보', link: '/ticket/seatmap' },
-    ],
+    sub: [{ title: '티켓예매', link: '/ticket/reservation' }],
   },
 ];
