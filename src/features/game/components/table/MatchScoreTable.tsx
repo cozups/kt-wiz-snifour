@@ -53,7 +53,7 @@ const MatchScoreTable = ({ data }: MatchScoreTableProps) => {
             key={team.bhomeName}
             className="border-none font-medium bg-black text-center text-wiz-white"
           >
-            <TableCell className="font-medium text-center bg-[#fefefe50] text-wiz-white">
+            <TableCell className="lg:p-2 font-medium text-center bg-[#fefefe50] text-wiz-white">
               {team.bhomeName}
             </TableCell>
             {Array.from({ length: 15 }, (_, i) => (

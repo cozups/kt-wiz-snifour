@@ -1,16 +1,13 @@
+import Skeleton from 'react-loading-skeleton';
+import { useParams } from 'react-router';
+
 import { Breadcrumb, SubTitle } from '@/features/common';
 import {
   BattingRecordTable,
   KeyRecordsCard,
   MatchBoard,
-  MatchScoreTable,
   PitchingRecordTable,
 } from '@/features/game';
-import { formatDate } from '@/lib/utils';
-import { useEffect, useState } from 'react';
-import Skeleton from 'react-loading-skeleton';
-import 'react-loading-skeleton/dist/skeleton.css';
-import { useParams } from 'react-router';
 import { useGetBoxscoreQuery } from './apis/boxscore/boxscoreApi.query';
 import useGetRecentMatchScheduleQuery from './apis/match-schedule/RecentScheduleApi.query';
 
@@ -20,55 +17,29 @@ const BoxscoreTab = () => {
     gameKey: string;
   }>();
 
-  const [boxscoreDate, setBoxscoreDate] = useState<string | undefined>(
-    gameDate
-  );
-  const [boxscoreKey, setBoxscoreKey] = useState<string | undefined>(gameKey);
-
   const {
     recentMatchData,
     loading: recentLoading,
     error: recentError,
   } = useGetRecentMatchScheduleQuery();
 
-  useEffect(() => {
-    if (recentMatchData?.data.current && !gameDate && !gameKey) {
-      setBoxscoreDate(String(recentMatchData.data.current.gameDate));
-      setBoxscoreKey(String(recentMatchData.data.current.gmkey));
-    }
-    if (gameDate && gameKey) {
-      setBoxscoreDate(gameDate);
-      setBoxscoreKey(gameKey);
-    }
-  }, [recentMatchData, gameDate, gameKey]);
-
   const {
     data: matchData,
     isLoading,
     isError,
     error,
-  } = useGetBoxscoreQuery(boxscoreDate || '', boxscoreKey || '');
+  } = useGetBoxscoreQuery(
+    gameDate || recentMatchData?.data.current.displayDate || '',
+    gameKey || recentMatchData?.data.current.gmkey || ''
+  );
 
-  if (isError || recentError)
+  if (recentError || isError) {
     return (
       <div>
-        <p>Error: {error?.message || recentError}</p>
+        <p>Error: {recentError || error?.message}</p>
       </div>
     );
-
-  const handleDateChange = (direction: 'prev' | 'next') => {
-    if (matchData) {
-      const targetSchedule =
-        direction === 'prev'
-          ? matchData.schedule.prev
-          : matchData.schedule.next;
-      if (targetSchedule) {
-        const targetDate = targetSchedule.gameDate.toString();
-        const targetKey = targetSchedule.gmkey;
-        window.location.href = `/game/regular/boxscore/${targetDate}/${targetKey}`;
-      }
-    }
-  };
+  }
 
   return (
     <div className="w-full flex justify-center my-20">
@@ -83,30 +54,10 @@ const BoxscoreTab = () => {
           </div>
         ) : (
           <MatchBoard
-            team1Data={{
-              teamName: matchData?.schedule.current.visit,
-              logoUrl: matchData?.schedule.current.visitLogo,
-              result: matchData?.schedule.current.vscore,
-              stadium: '원정',
-              tabType: 'MatchBoard',
-            }}
-            team2Data={{
-              teamName: matchData?.schedule.current.home,
-              logoUrl: matchData?.schedule.current.homeLogo,
-              result: matchData?.schedule.current.hscore,
-              stadium: '홈',
-              tabType: 'MatchBoard',
-            }}
-            matchDate={formatDate(
-              matchData?.schedule.current.gameDate.toString()
-            )}
-            matchTime={matchData?.schedule.current.gtime}
-            stadium={matchData?.schedule.current.stadium}
-            gameTable={<MatchScoreTable data={matchData?.scoreboard} />}
-            crowd={matchData?.schedule.current.crowdCn}
-            onDateChange={handleDateChange}
-            disablePrev={!matchData.schedule.prev}
-            disableNext={!matchData.schedule.next}
+            match={matchData.schedule.current}
+            scoreboard={matchData.scoreboard}
+            prevMatch={matchData.schedule.prev}
+            nextMatch={matchData.schedule.next}
           />
         )}
 

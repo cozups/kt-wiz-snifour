@@ -1,80 +1,60 @@
 import { Card, CardContent } from '@/components/ui';
-import { BoxscoreData, EtcGame } from '@/features/game';
-import { usePlayerImage } from '@/features/game/hooks/boxscore/usePlayerImage';
+import { Batter, BoxscoreData, EtcGame, Pitcher } from '@/features/game';
+import { usePlayerImages } from '@/features/game/hooks/boxscore/usePlayerImage';
 
 interface KeyRecordsTableProps {
   data: BoxscoreData;
 }
 
-export const tableRows = [
-  { label: '결승타' },
-  { label: '2루타' },
-  { label: '실책' },
-  { label: '도루' },
-  { label: '도루자' },
-  { label: '주루사' },
-  { label: '병살타' },
-  { label: '심판' },
-];
-
-const getRecordByHow = (how: string, data: EtcGame[] | undefined) => {
+export const getRecordByHow = (how: string, data: EtcGame[] | undefined) => {
   const record = data?.find((game) => game.how === how);
   return record ? record.result : '';
 };
 
 function KeyRecordsCard({ data }: KeyRecordsTableProps) {
+  const tableRows = data.etcgames.map((record) => ({ label: record.how }));
+
+  /* 기록을 분리하는 함수
+    ex) "홍길동(1타점) 이철수(2안타) 박영희(홈런)"
+    => ["홍길동(1타점)", "이철수(2안타)", "박영희(홈런)"] */
   const seperateRecords = (str: string): string[] => {
     const pattern = /[^\s]+\([^\)]+\)/g;
     return str.match(pattern) || [str];
   };
 
-  const handlePlayerImage = (playerName: string) => {
-    let team = '';
-    const name = playerName.replace(/\d+/g, '').trim(); //이름에서 숫자 제외
+  const extractName = (name: string) => {
+    const extracted = name
+      .replace(/\d+호/g, '') // "숫자+호" 제거
+      .replace(/\(.*?\)/g, '') // 괄호 제거
+      .replace(/\d+/g, '') // 숫자 제거
+      .trim();
 
-    // 홈 팀 타자, 투수 확인
-    if (
-      data.hbatters.find((batter) => batter.name === name) ||
-      data.vbatters.find((batter) => batter.name === name)
-    ) {
-      team = data.schedule.current.homeKey;
-    }
-
-    // 원정 팀 타자, 투수 확인
-    if (
-      data.vbatters.find((batter) => batter.name === name) ||
-      data.vpitchers.find((pitcher) => pitcher.name === name)
-    ) {
-      team = data.schedule.current.visitKey;
-    }
-
-    const {
-      data: playerImage,
-      isLoading,
-      isError,
-      error,
-    } = usePlayerImage(team, name);
-
-    if (isLoading) return <div>Loading...</div>;
-    if (isError || !playerImage) {
-      console.log(error?.message);
-      return (
-        <img
-          src={undefined}
-          alt={name}
-          className="w-6 h-8 sm:w-7 sm:h-9 rounded-full"
-        />
-      );
-    }
-
-    return (
-      <img
-        src={playerImage}
-        alt={name}
-        className="w-6 h-8 sm:w-7 sm:h-9 rounded-full"
-      />
-    );
+    return extracted;
   };
+
+  const findTeam = (name: string) => {
+    const homePlayers: (Batter | Pitcher)[] = [
+      ...data.hbatters,
+      ...data.hpitchers,
+    ];
+
+    return homePlayers.find((player) => player.name === name)
+      ? data.schedule.current.homeKey
+      : data.schedule.current.visitKey;
+  };
+
+  const extracted = data.etcgames
+    .filter((record) => record.result !== '없음' && record.how !== '심판')
+    .flatMap((record) =>
+      seperateRecords(record.result).map((elem) => ({
+        team: findTeam(extractName(elem)),
+        name: extractName(elem),
+      }))
+    );
+
+  const playerImageQueries = usePlayerImages(extracted).map(
+    (query) => query.data
+  );
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -93,23 +73,22 @@ function KeyRecordsCard({ data }: KeyRecordsTableProps) {
                   className="flex gap-2 items-center"
                   key={`${row.label}-${record}`}
                 >
-                  {row.label !== '심판' && record.length > 0
-                    ? handlePlayerImage(
-                        record.substring(0, record.indexOf('('))
-                      )
-                    : ''}
-                  {row.label === '결승타' ? (
-                    <div className="sm:text-base flex flex-col">
-                      <span className="text-sm sm:text-base">
-                        {record.substring(0, record.indexOf('('))}
-                      </span>
-                      <span className="text-sm sm:text-base">
-                        {record.substring(record.indexOf('('))}
-                      </span>
-                    </div>
-                  ) : (
-                    <span className="text-sm sm:text-base">{record}</span>
-                  )}
+                  {row.label !== '심판' &&
+                    record.length > 0 &&
+                    record !== '없음' && (
+                      <img
+                        src={
+                          playerImageQueries.find(
+                            (query) => query?.playerName === extractName(record)
+                          )?.image
+                        }
+                        alt={extractName(record)}
+                        className="w-6 h-8 sm:w-7 sm:h-9 rounded-full"
+                      />
+                    )}
+                  <span className="text-sm sm:text-base break-keep">
+                    {record}
+                  </span>
                 </div>
               )
             )}

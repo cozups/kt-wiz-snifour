@@ -37,7 +37,7 @@ const TeamInfo = ({
           <p
             className={`${
               isMatchBoard
-                ? 'text-wiz-white text-opacity-30 text-center text-sm md:text:md lg:text-lg'
+                ? 'text-wiz-white text-opacity-30 text-center text-sm md:text-base'
                 : 'text-xs md:text-sm font-medium leading-none text-white'
             }`}
           >
