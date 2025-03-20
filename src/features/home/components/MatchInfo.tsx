@@ -1,47 +1,64 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router';
 
 import useGetRecentMatchScheduleQuery from '@/features/game/apis/match-schedule/RecentScheduleApi.query';
-import { useGetMatchScheduleQuery } from '@/features/game/apis/match-schedule/matchScheduleApi.query';
 import { cn } from '@/lib/utils';
-import { useMatchStore } from '@/store/useMatchStore';
-import { Link } from 'react-router';
 import MatchInfoCard from './MatchInfoCard';
 import RecentMatches from './RecentMatches';
 import { TeamRanking } from './TeamRanking';
+import { useGetBoxscoreQuery } from '@/features/game/apis/boxscore/boxscoreApi.query';
 
 function MatchInfo() {
-  useGetRecentMatchScheduleQuery();
-  const [matchIndex, setMatchIndex] = useState<number>(0);
-  const { recentMonth, currentMonth } = useMatchStore();
-  const { matchData, isLoading, isSuccess, isError, error } =
-    useGetMatchScheduleQuery({
-      currentMonth: recentMonth || currentMonth,
-    });
+  const [gameDate, setGameDate] = useState<string | undefined>(undefined);
+  const [gameKey, setGameKey] = useState<string | undefined>(undefined);
+  const {
+    data: recentMatchData,
+    loading: recentLoading,
+    error: recentError,
+    isSuccess: recentSuccess,
+  } = useGetRecentMatchScheduleQuery();
+
+  const {
+    data: boxscoreData,
+    isLoading: boxscoreLoading,
+    isError: boxscoreError,
+    prefetchBoxscoreQuery,
+  } = useGetBoxscoreQuery(gameDate || '', gameKey || '');
 
   useEffect(() => {
-    if (isSuccess) {
-      setMatchIndex(matchData.length - 1);
+    if (recentSuccess) {
+      setGameDate(recentMatchData?.current.displayDate);
+      setGameKey(recentMatchData?.current.gmkey);
     }
-  }, [isSuccess, matchData.length]);
-
-  if (isError) {
-    return <div>Error: {error?.toString()}</div>;
-  }
+  }, [recentSuccess, recentMatchData]);
 
   const handlePrevDay = () => {
-    if (matchIndex === 0) return;
-    setMatchIndex((prev) => prev - 1);
+    if (!boxscoreData?.schedule.prev) return;
+    setGameDate(boxscoreData.schedule.prev.gameDate.toString());
+    setGameKey(boxscoreData.schedule.prev.gmkey);
   };
 
   const handleNextDay = () => {
-    if (matchIndex === matchData.length - 1) return;
-    setMatchIndex((prev) => prev + 1);
+    if (!boxscoreData?.schedule.next) return;
+    setGameDate(boxscoreData.schedule.next.gameDate.toString());
+    setGameKey(boxscoreData.schedule.next.gmkey);
   };
 
-  const matchOfToday = matchData[matchIndex];
+  if (recentError || boxscoreError) {
+    return <p>Error: 에러가 발생했습니다. 다시 시도해보세요.</p>;
+  }
 
   return (
-    <>
+    <div className="w-full">
+      <h3
+        className={cn(
+          'text-white font-bold text-base my-2',
+          'md:text-xl md:my-3',
+          'lg:text-2xl lg:my-4'
+        )}
+      >
+        이 달의 경기
+      </h3>
       <div
         className={cn(
           'w-full h-fit flex flex-col items-start rounded-3xl overflow-hidden bg-white',
@@ -51,16 +68,15 @@ function MatchInfo() {
       >
         <MatchInfoCard>
           <MatchInfoCard.Header
-            match={matchData}
-            matchIndex={matchIndex}
+            match={boxscoreData?.schedule}
             handlePrevDay={handlePrevDay}
             handleNextDay={handleNextDay}
-            loading={isLoading}
+            prefetch={prefetchBoxscoreQuery}
+            loading={recentLoading || boxscoreLoading}
           />
           <MatchInfoCard.Content
-            match={matchData}
-            matchIndex={matchIndex}
-            loading={isLoading}
+            match={boxscoreData?.schedule.current}
+            loading={recentLoading || boxscoreLoading}
           />
         </MatchInfoCard>
         {/* 사이드 */}
@@ -71,11 +87,7 @@ function MatchInfo() {
           )}
         >
           <TeamRanking />
-          <RecentMatches
-            match={matchData}
-            matchOfToday={matchOfToday}
-            loading={isLoading}
-          />
+          <RecentMatches match={boxscoreData?.schedule.current} />
         </div>
       </div>
       <div className="flex items-center justify-center my-4">
@@ -89,7 +101,7 @@ function MatchInfo() {
           더 많은 경기보기
         </Link>
       </div>
-    </>
+    </div>
   );
 }
 

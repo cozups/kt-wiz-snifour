@@ -8,8 +8,10 @@
         { "code": "S-T", "name": "SBS TV" },
         { "code": "KN-T", "name": "KBS N SPORTS" },
         { "code": "MS-T", "name": "MBC SPORTS PLUS" },
+        { "code": "MS-T", "name": "MBC SPORTS+" },
         { "code": "SS-T", "name": "SBS SPORTS" },
         { "code": "SPOTV+", "name": "SPOTV PLUS" },
+        { "code": "SPOTV+", "name": "SPOTV+" },
         { "code": "SKY-T", "name": "SKY SPORTS" }
       ]
     },
@@ -45,6 +47,10 @@
         { "code": "KNN-R", "name": "KNN 라디오" },
         { "code": "KBC-R", "name": "KBC 라디오" }
       ]
+    },
+    {
+      "category": "ONLINE",
+      "items": [{ "code": "TVING", "name": "TVING" }]
     }
   ]
 }

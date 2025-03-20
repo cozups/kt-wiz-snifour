@@ -40,6 +40,7 @@ export interface GameSchedule {
 export interface RecentGameScheduleResponse {
   data: {
     current: RecentMatches;
-    prev: RecentMatches;
+    prev?: RecentMatches;
+    next?: RecentMatches;
   };
 }

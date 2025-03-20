@@ -1,4 +1,7 @@
+import { ReactNode, useEffect, useMemo } from 'react';
 import { Link } from 'react-router';
+import Skeleton from 'react-loading-skeleton';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 import {
   Card,
@@ -8,26 +11,46 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui';
-import { GameSchedule } from '@/features/game/types/match-schedule';
 import { cn, findBroadCast, formatDate } from '@/lib/utils';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { ReactNode, useMemo } from 'react';
-import Skeleton from 'react-loading-skeleton';
+import { ScheduleInfo } from '@/features/game';
 
-function MatchInfoHeader({
-  match,
-  matchIndex,
-  handlePrevDay,
-  handleNextDay,
-  loading,
-}: {
-  match: GameSchedule[];
-  matchIndex: number;
+interface MatchInfoHeaderProps {
+  match:
+    | {
+        current: ScheduleInfo;
+        next?: ScheduleInfo;
+        prev?: ScheduleInfo;
+      }
+    | undefined;
   handlePrevDay: () => void;
   handleNextDay: () => void;
   loading: boolean;
-}) {
-  const matchOfToday = match[matchIndex];
+  prefetch: (gameDate: string, gmkey: string) => void;
+}
+
+function MatchInfoHeader({
+  match,
+  handlePrevDay,
+  handleNextDay,
+  loading,
+  prefetch,
+}: MatchInfoHeaderProps) {
+  const matchOfToday = match?.current;
+
+  useEffect(() => {
+    if (match?.prev) {
+      prefetch(
+        match?.prev?.gameDate.toString() || '',
+        match?.prev?.gmkey || ''
+      );
+    }
+    if (match?.next) {
+      prefetch(
+        match?.next?.gameDate.toString() || '',
+        match?.next?.gmkey || ''
+      );
+    }
+  }, [match?.next, match?.prev, prefetch]);
 
   return (
     <CardHeader className="w-full flex flex-row items-center justify-between">
@@ -38,21 +61,19 @@ function MatchInfoHeader({
       ) : (
         <>
           <ChevronLeft
-            className={`cursor-pointer ${matchIndex === 0 && 'invisible'}`}
+            className={cn('cursor-pointer', !match?.prev && 'invisible')}
             onClick={handlePrevDay}
           />
           <div className="flex flex-col items-center justify-center">
             <h3 className="font-semibold text-sm lg:text-lg">
-              {formatDate(matchOfToday?.displayDate)}
+              {formatDate(matchOfToday?.gameDate.toString())}
             </h3>
             <p className="text-gray-600 text-xs lg:text-sm">
               {matchOfToday?.stadium} {matchOfToday?.gtime}
             </p>
           </div>
           <ChevronRight
-            className={`cursor-pointer ${
-              matchIndex === match.length - 1 && 'invisible'
-            }`}
+            className={cn('cursor-pointer', !match?.next && 'invisible')}
             onClick={handleNextDay}
           />
         </>
@@ -63,40 +84,40 @@ function MatchInfoHeader({
 
 function MatchInfoContent({
   match,
-  matchIndex,
   loading,
 }: {
-  match: GameSchedule[];
-  matchIndex: number;
+  match: ScheduleInfo | undefined;
   loading: boolean;
 }) {
-  const matchOfToday = match[matchIndex];
-
-  const broadcast = useMemo(() => {
-    return matchOfToday ? findBroadCast(matchOfToday.broadcast) : [];
-  }, [matchOfToday]);
+  const gameBroadcast = useMemo(() => {
+    return match?.broadcast ? findBroadCast(match?.broadcast) : [];
+  }, [match?.broadcast]);
 
   return (
     <CardContent className="w-[75%] flex flex-col items-center py-4 lg:py-12">
       <div className="w-full flex items-center justify-center">
         <div className="flex-1 flex items-center justify-between lg:gap-16">
+          {/* 홈 로고 */}
           <div className="w-20 h-20 lg:w-40 lg:h-40">
             {loading ? (
               <Skeleton className="w-full h-full" baseColor="#d1d5db" />
             ) : (
-              <img src={matchOfToday?.homeLogo} alt={matchOfToday?.homeKey} />
+              <img src={match?.homeLogo} alt={match?.homeKey} />
             )}
           </div>
+          {/* 경기 결과 */}
           <div className="w-32 flex flex-col items-center justify-end">
-            <div className="font-bold text-3xl md:text-5xl mt-4 lg:text-6xl lg:mt-8">
-              {loading ? (
+            <div className="font-bold text-3xl md:text-5xl mt-4 lg:mt-8">
+              {loading && (
                 <Skeleton
                   className="w-24 h-12 md:w-32 md:h-16 lg:w-36 lg:h-20"
                   baseColor="#d1d5db"
                 />
-              ) : (
-                `${matchOfToday?.homeScore} : ${matchOfToday?.visitScore}`
               )}
+              {!loading && match?.cancelFlag === '1' && '취소'}
+              {!loading &&
+                match?.cancelFlag !== '1' &&
+                `${match?.hscore} : ${match?.vscore}`}
             </div>
             <button
               type="button"
@@ -108,7 +129,7 @@ function MatchInfoContent({
               disabled={loading}
             >
               <Link
-                to={`/game/regular/boxscore/${matchOfToday?.gameDate}/${matchOfToday?.gmkey}`}
+                to={`/game/regular/boxscore/${match?.gameDate}/${match?.gmkey}`}
                 className="flex items-center justify-center text-[0.6rem] md:text-xs lg:text-base"
               >
                 경기정보{' '}
@@ -116,11 +137,12 @@ function MatchInfoContent({
               </Link>
             </button>
           </div>
+          {/* 원정 로고 */}
           <div className="w-20 h-20 lg:w-40 lg:h-40">
             {loading ? (
               <Skeleton className="w-full h-full" baseColor="#d1d5db" />
             ) : (
-              <img src={matchOfToday?.visitLogo} alt={matchOfToday?.visitKey} />
+              <img src={match?.visitLogo} alt={match?.visitKey} />
             )}
           </div>
         </div>
@@ -144,10 +166,10 @@ function MatchInfoContent({
                   baseColor="#d1d5db"
                 />
               ) : (
-                broadcast.map((br) =>
+                gameBroadcast.map((br) =>
                   br.channels.length > 0 ? (
                     <div key={br.platform} className="flex items-center gap-2">
-                      <p className="bg-wiz-black w-14 text-center text-white px-2 py-1 rounded text-[0.6rem] lg:text-xs">
+                      <p className="bg-wiz-black min-w-14 text-center text-white px-2 py-1 rounded text-[0.6rem] lg:text-xs">
                         {br.platform}
                       </p>
                       <p className="text-[0.6rem] lg:text-sm">{br.channels}</p>

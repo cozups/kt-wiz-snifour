@@ -17,15 +17,15 @@ const WatchPointTab = () => {
   const [gameKey, setGameKey] = useState<string | null>(null);
 
   const {
-    recentMatchData,
+    data: recentMatchData,
     loading: recentLoading,
     error: recentError,
   } = useGetRecentMatchScheduleQuery();
 
   useEffect(() => {
-    if (recentMatchData?.data?.current) {
-      setGameDate(String(recentMatchData.data.current.gameDate));
-      setGameKey(String(recentMatchData.data.current.gmkey));
+    if (recentMatchData?.current) {
+      setGameDate(String(recentMatchData.current.gameDate));
+      setGameKey(String(recentMatchData.current.gmkey));
     }
   }, [recentMatchData]);
 

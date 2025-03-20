@@ -35,6 +35,7 @@ const useGetRecentMatchScheduleQuery = () => {
     data: recentMatchData,
     isLoading,
     error,
+    isSuccess,
   } = useQuery<RecentGameScheduleResponse, Error>({
     queryKey: RECENT_MATCHES_QUERY_KEY,
     queryFn: fetchFn,
@@ -43,9 +44,10 @@ const useGetRecentMatchScheduleQuery = () => {
   });
 
   return {
-    recentMatchData,
+    data: recentMatchData?.data,
     loading: isLoading,
     error: error?.message || null,
+    isSuccess,
   };
 };
 

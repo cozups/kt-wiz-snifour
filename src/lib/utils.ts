@@ -17,13 +17,13 @@ export function formatDate(dateString: string | undefined) {
   return `${year}.${month}.${day}`;
 }
 
-export function findBroadCast(broadcastCodes: string) {
-  if (!broadcastCodes) return [];
+export function findBroadCast(broadcastChannels: string) {
+  if (!broadcastChannels.trim().length) return [];
 
-  const codes = broadcastCodes.split(',');
+  const channelStrings = broadcastChannels.split(',');
   const result = channels.map((platform) => {
     const found = platform.items
-      .filter((channel) => codes.includes(channel.code))
+      .filter((channel) => channelStrings.includes(channel.name))
       .map((ch) => ch.name);
 
     return { platform: platform.category, channels: found.join(', ') };
