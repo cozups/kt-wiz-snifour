@@ -1,27 +1,33 @@
 import { useNavigate } from 'react-router';
+import { ReactNode } from 'react';
 import { IconLeft, IconRight } from 'react-day-picker';
 
 import { TeamData, TeamInfo } from '@/features/common';
-import { ScheduleInfo, ScoreboardEntry } from '@/features/game/types/boxscore';
+import { ScheduleInfo } from '@/features/game/types/boxscore';
 import { formatDate } from '@/lib/utils';
-import { MatchScoreTable } from '@/features/game';
+import { GameSchedule, GameScore } from '@/features/game';
 
 interface MatchBoardProps {
-  match: ScheduleInfo;
-  scoreboard: ScoreboardEntry[];
-  prevMatch: ScheduleInfo;
-  nextMatch: ScheduleInfo;
+  match: ScheduleInfo | GameScore;
+  prevMatch: ScheduleInfo | GameSchedule | undefined;
+  nextMatch: ScheduleInfo | GameSchedule | undefined;
+  children?: ReactNode;
+  onDateChange?: (direction: 'prev' | 'next') => void;
 }
 
 const MatchBoard = ({
   match,
-  scoreboard,
   prevMatch,
   nextMatch,
+  children,
+  onDateChange,
 }: MatchBoardProps) => {
   const navigate = useNavigate();
 
-  const isCancelled = !!Number(match.cancelFlag);
+  const isCancelled =
+    'cancelFlag' in match
+      ? !!Number(match.cancelFlag)
+      : match.hOutcome === '취';
 
   const homeTeam: TeamData = {
     teamName: match.home,
@@ -40,11 +46,12 @@ const MatchBoard = ({
   };
 
   const handleDateChange = (direction: 'prev' | 'next') => {
-    if (direction === 'prev') {
+    if (direction === 'prev' && prevMatch) {
       navigate(
         `/game/regular/boxscore/${prevMatch.gameDate}/${prevMatch.gmkey}`
       );
-    } else {
+    }
+    if (direction === 'next' && nextMatch) {
       navigate(
         `/game/regular/boxscore/${nextMatch.gameDate}/${nextMatch.gmkey}`
       );
@@ -58,7 +65,11 @@ const MatchBoard = ({
         <button
           type="button"
           disabled={prevMatch === undefined}
-          onClick={() => handleDateChange('prev')}
+          onClick={
+            onDateChange
+              ? () => onDateChange('prev')
+              : () => handleDateChange('prev')
+          }
           className={`flex items-center justify-center text-lg font-semibold text-white bg-wiz-white bg-opacity-30 w-8 h-8 md:w-10 md:h-10 rounded ${
             prevMatch === undefined
               ? 'opacity-30 cursor-not-allowed'
@@ -73,12 +84,18 @@ const MatchBoard = ({
           </span>
           <span className="text-center text-wiz-white text-opacity-50 text-sm md:text-md lg:text-lg">
             {match.gtime} | {match.stadium}
-            {!isCancelled && ` | 관중: ${match.crowdCn.toLocaleString()}명`}
+            {!isCancelled &&
+              'crowdCn' in match &&
+              ` | 관중: ${match.crowdCn.toLocaleString()}명`}
           </span>
         </div>
         <button
           type="button"
-          onClick={() => handleDateChange('next')}
+          onClick={
+            onDateChange
+              ? () => onDateChange('next')
+              : () => handleDateChange('next')
+          }
           disabled={nextMatch === undefined}
           className={`flex items-center justify-center text-lg font-semibold text-white bg-wiz-white bg-opacity-30 w-8 h-8 md:w-10 md:h-10 rounded ${
             nextMatch === undefined
@@ -111,9 +128,7 @@ const MatchBoard = ({
                 <TeamInfo {...visitTeam} />
               </div>
               {/* 경기 테이블 */}
-              <div className="w-full">
-                <MatchScoreTable data={scoreboard} />
-              </div>
+              <div className="w-full">{children}</div>
             </div>
 
             {/* 큰 화면 레이아웃 */}
@@ -121,9 +136,7 @@ const MatchBoard = ({
               {/* team1 */}
               <TeamInfo {...homeTeam} />
               {/* 경기 테이블 */}
-              <div>
-                <MatchScoreTable data={scoreboard} />
-              </div>
+              <div>{children}</div>
               {/* team2 */}
               <TeamInfo {...visitTeam} />
             </div>

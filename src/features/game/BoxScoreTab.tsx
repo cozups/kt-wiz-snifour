@@ -6,6 +6,7 @@ import {
   BattingRecordTable,
   KeyRecordsCard,
   MatchBoard,
+  MatchScoreTable,
   PitchingRecordTable,
 } from '@/features/game';
 import { useGetBoxscoreQuery } from './apis/boxscore/boxscoreApi.query';
@@ -55,10 +56,11 @@ const BoxscoreTab = () => {
         ) : (
           <MatchBoard
             match={matchData.schedule.current}
-            scoreboard={matchData.scoreboard}
             prevMatch={matchData.schedule.prev}
             nextMatch={matchData.schedule.next}
-          />
+          >
+            <MatchScoreTable data={matchData.scoreboard} />
+          </MatchBoard>
         )}
 
         {/* 주요 기록 */}

@@ -1,3 +1,6 @@
+import { useEffect, useState } from 'react';
+import Skeleton from 'react-loading-skeleton';
+
 import { Breadcrumb, SubTitle } from '@/features/common';
 import {
   MatchBoard,
@@ -6,21 +9,18 @@ import {
   StartingPitcherTable,
   TeamLineup,
 } from '@/features/game';
-import { useEffect, useState } from 'react';
-import Skeleton from 'react-loading-skeleton';
-import 'react-loading-skeleton/dist/skeleton.css';
 import useGetRecentMatchScheduleQuery from './apis/match-schedule/RecentScheduleApi.query';
 import useGetWatchPointQuery from './apis/watch-point/watchPointApi.query';
 
 const WatchPointTab = () => {
+  const [gameDate, setGameDate] = useState<string | null>(null);
+  const [gameKey, setGameKey] = useState<string | null>(null);
+
   const {
     recentMatchData,
     loading: recentLoading,
     error: recentError,
   } = useGetRecentMatchScheduleQuery();
-
-  const [gameDate, setGameDate] = useState<string | null>(null);
-  const [gameKey, setGameKey] = useState<string | null>(null);
 
   useEffect(() => {
     if (recentMatchData?.data?.current) {
@@ -66,35 +66,18 @@ const WatchPointTab = () => {
           </div>
         ) : (
           <MatchBoard
-            team1Data={{
-              teamName: watchData.gameScore.home || '',
-              logoUrl: watchData.gameScore.homeLogo || '',
-              result: watchData.gameScore.hscore,
-              stadium: '홈',
-              tabType: 'MatchBoard',
-            }}
-            team2Data={{
-              teamName: watchData.gameScore.visit || '',
-              logoUrl: watchData.gameScore.visitLogo || '',
-              result: watchData.gameScore.vscore,
-              stadium: '원정',
-              tabType: 'MatchBoard',
-            }}
-            matchDate={watchData.gameScore.displayDate || ''}
-            matchTime={watchData.gameScore.gtime || ''}
-            stadium={watchData.gameScore.stadium || ''}
-            gameTable={
-              <MatchSummaryTable
-                homeTeamRank={watchData.homeTeamRank}
-                visitTeamRank={watchData.visitTeamRank}
-                homeTeamWinLose={watchData.homeTeamWinLose}
-                visitTeamWinLose={watchData.visitTeamWinLose}
-              />
-            }
+            match={watchData.gameScore}
             onDateChange={handleDateChange}
-            disablePrev={!watchData.schedule?.prev}
-            disableNext={!watchData.schedule?.next}
-          />
+            prevMatch={watchData.schedule?.prev}
+            nextMatch={watchData.schedule?.next}
+          >
+            <MatchSummaryTable
+              homeTeamRank={watchData.homeTeamRank}
+              visitTeamRank={watchData.visitTeamRank}
+              homeTeamWinLose={watchData.homeTeamWinLose}
+              visitTeamWinLose={watchData.visitTeamWinLose}
+            />
+          </MatchBoard>
         )}
 
         {/* 선발투수 비교 */}
