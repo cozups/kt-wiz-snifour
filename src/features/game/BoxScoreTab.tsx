@@ -19,7 +19,7 @@ const BoxscoreTab = () => {
   }>();
 
   const {
-    recentMatchData,
+    data: recentMatchData,
     loading: recentLoading,
     error: recentError,
   } = useGetRecentMatchScheduleQuery();
@@ -30,8 +30,8 @@ const BoxscoreTab = () => {
     isError,
     error,
   } = useGetBoxscoreQuery(
-    gameDate || recentMatchData?.data.current.displayDate || '',
-    gameKey || recentMatchData?.data.current.gmkey || ''
+    gameDate || recentMatchData?.current.displayDate || '',
+    gameKey || recentMatchData?.current.gmkey || ''
   );
 
   if (recentError || isError) {

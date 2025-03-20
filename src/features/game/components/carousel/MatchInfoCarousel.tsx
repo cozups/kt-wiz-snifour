@@ -16,11 +16,11 @@ import { useEffect, useMemo, useState } from 'react';
 const MatchInfoCarousel = () => {
   const [carouselApi, setCarouselApi] = useState<CarouselApi | null>(null);
   const { currentMonth, selectedDate } = useMatchStore();
-  const { recentMatchData } = useGetRecentMatchScheduleQuery();
+  const { data: recentMatchData } = useGetRecentMatchScheduleQuery();
 
   // recentMonth 계산
   const recentMonth = useMemo(
-    () => parseDate(recentMatchData?.data.current.gameDate?.toString()),
+    () => parseDate(recentMatchData?.current.gameDate?.toString()),
     [recentMatchData]
   );
 
