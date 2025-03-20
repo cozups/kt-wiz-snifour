@@ -45,8 +45,12 @@ const WizVideoAnimation: React.FC<WizVideoAnimationProps> = ({
         }
       }}
     >
-      <div className="w-full h-fit bg-gray-500">
-        <img src={vid.imgFilePath} alt={vid.artcTitle} />
+      <div className="bg-gray-500">
+        <img
+          src={vid.imgFilePath}
+          alt={vid.artcTitle}
+          className="w-full aspect-video object-cover"
+        />
       </div>
       <div className="h-full flex flex-col justify-between px-2 py-1 gap-4 md:gap-8">
         <p
