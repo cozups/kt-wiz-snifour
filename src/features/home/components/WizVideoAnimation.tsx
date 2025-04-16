@@ -50,6 +50,7 @@ const WizVideoAnimation: React.FC<WizVideoAnimationProps> = ({
           src={vid.imgFilePath}
           alt={vid.artcTitle}
           className="w-full aspect-video object-cover"
+          loading="lazy"
         />
       </div>
       <div className="h-full flex flex-col justify-between px-2 py-1 gap-4 md:gap-8">

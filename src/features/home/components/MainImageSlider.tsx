@@ -12,12 +12,24 @@ function MainImageSlider() {
     >
       <CarouselContent className="h-80 lg:h-[28rem]">
         <CarouselItem>
-          <Card className="w-full h-full border-none relative  ">
-            <img
-              src="/assets/main/2024_post_bg_web.png"
-              alt="2024 가을의 마법사"
-              className="w-full h-full object-cover object-center "
-            />
+          <Card className="w-full h-full border-none relative">
+            <picture>
+              <source
+                media="(max-width: 768px)"
+                srcSet="/assets/main/2024_post_bg_mobile.webp"
+              />
+              <source
+                media="(max-width: 1024px)"
+                srcSet="/assets/main/2024_post_bg_tablet.webp"
+              />
+              <img
+                src="/assets/main/2024_post_bg_web.webp"
+                alt="2024 가을의 마법사"
+                fetchPriority="high"
+                className="w-full h-full object-cover object-center"
+                loading="lazy"
+              />
+            </picture>
             <div className="w-full text-wiz-white absolute bottom-0 left-0 px-6 py-4 lg:px-12 lg:py-8 bg-gradient-to-t from-black to-transparent">
               <h3 className="text-2xl lg:text-4xl font-bold">
                 가을의 마법사 KT Wiz
@@ -34,6 +46,7 @@ function MainImageSlider() {
               src="/assets/main/player@2x.png"
               alt="이 달의 선수"
               className="w-full h-full object-cover object-top"
+              loading="lazy"
             />
             <div className="w-full text-wiz-white absolute bottom-0 left-0 px-6 py-4 lg:px-12 lg:py-8 bg-gradient-to-t from-black to-transparent">
               <h3 className="text-2xl lg:text-4xl font-bold">이 달의 선수</h3>
@@ -49,6 +62,7 @@ function MainImageSlider() {
               src="/assets/main/img-banner-store@2x.png"
               alt="온라인 스토어"
               className="w-full h-full object-cover object-top"
+              loading="lazy"
             />
             <div className="w-full text-wiz-white absolute bottom-0 left-0 px-6 py-4 lg:px-12 lg:py-8 bg-gradient-to-t from-black to-transparent">
               <h3 className="text-2xl lg:text-4xl font-bold">

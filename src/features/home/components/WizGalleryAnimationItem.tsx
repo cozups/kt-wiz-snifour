@@ -45,6 +45,7 @@ const WizGalleryAnimationItem = ({
                 src={photo.imgFilePath}
                 alt={photo.artcTitle}
                 className="w-auto h-full object-cover object-center"
+                loading="lazy"
               />
               <div className="h-full w-full absolute top-0 left-0 flex flex-col items-center justify-end">
                 <h3 className="w-full text-center text-white font-bold text-2xl z-10 pb-12 bg-gradient-to-t from-black to-transparent break-keep">
