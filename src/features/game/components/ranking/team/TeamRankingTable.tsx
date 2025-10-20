@@ -1,34 +1,19 @@
-import { teamRankColums } from '@/constants/columns/team-rank-colums';
-import { DataTable } from '@/features/common';
-import { useTeamRank } from '@/features/game/hooks/ranking/useTeamRank';
+import { teamRankColums } from "@/constants/columns/team-rank-colums";
+import { DataTable } from "@/features/common";
+// import { useTeamRank } from "@/features/game/hooks/ranking/useTeamRank";
+import data from "@/assets/data/__test__/mockRanking.json";
 
 function TeamRankingTable() {
-  const { ranking, isLoading, isError, error } = useTeamRank('team');
+  // const { ranking, isError, error, isLoading } = useTeamRank("team");
 
-  if (isError) {
-    return (
-      <div className="w-full min-h-48 flex items-center justify-center font-bold text-2xl">
-        Error!: {error?.toString()}
-      </div>
-    );
-  }
+  // if (isError) {
+  //   throw new Error(error?.toString());
+  // }
 
-  if (!ranking?.length) {
-    return (
-      <div className="w-full min-h-48 flex items-center justify-center font-bold text-2xl">
-        데이터가 존재하지 않습니다.
-      </div>
-    );
-  }
+  const ranking = data.team;
+  const isLoading = false;
 
-  return (
-    <DataTable
-      data={ranking}
-      columns={teamRankColums}
-      loading={isLoading}
-      domain="all"
-    />
-  );
+  return <DataTable data={ranking ?? []} columns={teamRankColums} domain="all" isLoading={isLoading} />;
 }
 
 export { TeamRankingTable };

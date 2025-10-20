@@ -1,5 +1,5 @@
-import { ApiRoutes } from '@/constants/route';
-import instance from '@/lib/axios/instance';
+import { ApiRoutes } from "@/constants/route";
+import instance from "@/lib/axios/instance";
 
 import {
   BatterRankingResponse,
@@ -8,7 +8,7 @@ import {
   RankingDto,
   TeamRankingResponse,
   TeamVSResponse,
-} from '@/features/game';
+} from "@/features/game";
 
 // ranking api
 export const rankingApi = {
@@ -31,61 +31,43 @@ export const rankingApi = {
   },
 
   // 투수
-  getPitcherEraTop3: async (
-    params?: RankingDto
-  ): Promise<PitcherRankingResponse> => {
+  getPitcherEraTop3: async (params?: RankingDto): Promise<PitcherRankingResponse> => {
     const response = await instance.get(ApiRoutes.PitcherEraTop3, { params });
     return response.data;
   },
-  getPitcherWinTop3: async (
-    params?: RankingDto
-  ): Promise<PitcherRankingResponse> => {
+  getPitcherWinTop3: async (params?: RankingDto): Promise<PitcherRankingResponse> => {
     const response = await instance.get(ApiRoutes.PitcherWinTop3, { params });
     return response.data;
   },
-  getKTPitcherRanking: async (
-    params?: RankingDto
-  ): Promise<PitcherRankingResponse> => {
+  getKTPitcherRanking: async (params?: RankingDto): Promise<PitcherRankingResponse> => {
     const response = await instance.get(ApiRoutes.KtPitcherRank, { params });
     return response.data;
   },
-  getAllPitcherRanking: async (
-    params?: RankingDto
-  ): Promise<PitcherRankingResponse> => {
+  getAllPitcherRanking: async (params?: RankingDto): Promise<PitcherRankingResponse> => {
     const response = await instance.get(ApiRoutes.AllPitcherRank, { params });
     return response.data;
   },
 
   // 타자
-  getBatterHraTop3: async (
-    params?: RankingDto
-  ): Promise<BatterRankingResponse> => {
+  getBatterHraTop3: async (params?: RankingDto): Promise<BatterRankingResponse> => {
     const response = await instance.get(ApiRoutes.BatterHraTop3, { params });
     return response.data;
   },
-  getBatterHrTop3: async (
-    params?: RankingDto
-  ): Promise<BatterRankingResponse> => {
+  getBatterHrTop3: async (params?: RankingDto): Promise<BatterRankingResponse> => {
     const response = await instance.get(ApiRoutes.BatterHrTop3, { params });
     return response.data;
   },
-  getKTBatterRanking: async (
-    params?: RankingDto
-  ): Promise<BatterRankingResponse> => {
+  getKTBatterRanking: async (params?: RankingDto): Promise<BatterRankingResponse> => {
     const response = await instance.get(ApiRoutes.KTBatterRank, { params });
     return response.data;
   },
-  getAllBatterRanking: async (
-    params?: RankingDto
-  ): Promise<BatterRankingResponse> => {
+  getAllBatterRanking: async (params?: RankingDto): Promise<BatterRankingResponse> => {
     const response = await instance.get(ApiRoutes.AllBatterRank, { params });
     return response.data;
   },
 
   // 관중
-  getCrowdRanking: async (
-    params?: RankingDto
-  ): Promise<CrowdRankingResponse> => {
+  getCrowdRanking: async (params?: RankingDto): Promise<CrowdRankingResponse> => {
     const response = await instance.get(ApiRoutes.CrowdRank, { params });
     return response.data;
   },

@@ -1,25 +1,20 @@
-import { Tabs, TabsContent, TabsList } from '@/components/ui';
-import { SubTabsTrigger } from '@/features/common';
-import {
-  BatterRankingTab,
-  CrowdRankingTab,
-  PitcherRankingTab,
-  TeamRankingTab,
-} from '@/features/game';
-import { useTabFromUrl } from '@/hooks/useTabFromUrl';
+import { Tabs, TabsContent, TabsList } from "@/components/ui";
+import { SubTabsTrigger } from "@/features/common";
+import { BatterRankingTab, CrowdRankingTab, PitcherRankingTab, TeamRankingTab } from "@/features/game";
+import { useTabFromUrl } from "@/hooks/useTabFromUrl";
 
 const REG_TABS_CONFIG = [
-  { value: 'team', path: '/ranking/team' },
-  { value: 'pitcher', path: '/ranking/pitcher' },
-  { value: 'batter', path: '/ranking/batter' },
-  { value: 'crowd', path: '/ranking/crowd' },
+  { value: "team", path: "/ranking/team" },
+  { value: "pitcher", path: "/ranking/pitcher" },
+  { value: "batter", path: "/ranking/batter" },
+  { value: "crowd", path: "/ranking/crowd" },
 ];
 
 function RankingTab() {
   const { currentTab, handleTabChange } = useTabFromUrl({
-    basePath: '/game/regular',
+    basePath: "/game/regular",
     tabs: REG_TABS_CONFIG,
-    defaultTab: 'team',
+    defaultTab: "team",
   });
 
   return (

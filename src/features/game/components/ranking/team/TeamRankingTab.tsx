@@ -1,11 +1,15 @@
-import { Tabs, TabsContent, TabsList } from '@/components/ui';
-import { Breadcrumb, SubTabsTrigger, SubTitle } from '@/features/common';
-import {
-  TeamBatterRankingView,
-  TeamPitcherRankingView,
-  TeamRankingTable,
-  TeamVSTable,
-} from '@/features/game';
+import { ErrorBoundary } from "react-error-boundary";
+import { Tabs, TabsContent, TabsList } from "@/components/ui";
+import { Breadcrumb, SubTabsTrigger, SubTitle } from "@/features/common";
+import { TeamBatterRankingView, TeamPitcherRankingView, TeamRankingTable, TeamVSTable } from "@/features/game";
+import { ErrorFallback } from "../../../../common/components/ErrorFallback";
+
+const TABS = [
+  { value: "team", component: <TeamRankingTable /> },
+  { value: "teamPitcher", component: <TeamPitcherRankingView /> },
+  { value: "teamBatter", component: <TeamBatterRankingView /> },
+  { value: "teamMatchRecords", component: <TeamVSTable /> },
+];
 
 function TeamRankingTab() {
   return (
@@ -21,18 +25,11 @@ function TeamRankingTab() {
           <SubTabsTrigger value="teamBatter">타자 기록</SubTabsTrigger>
           <SubTabsTrigger value="teamMatchRecords">팀 상대 전적</SubTabsTrigger>
         </TabsList>
-        <TabsContent value="team" className="w-full">
-          <TeamRankingTable />
-        </TabsContent>
-        <TabsContent value="teamPitcher" className="w-full">
-          <TeamPitcherRankingView />
-        </TabsContent>
-        <TabsContent value="teamBatter" className="w-full">
-          <TeamBatterRankingView />
-        </TabsContent>
-        <TabsContent value="teamMatchRecords" className="w-full">
-          <TeamVSTable />
-        </TabsContent>
+        {TABS.map((tab) => (
+          <TabsContent key={tab.value} value={tab.value} className="w-full">
+            <ErrorBoundary fallbackRender={ErrorFallback}>{tab.component}</ErrorBoundary>
+          </TabsContent>
+        ))}
       </Tabs>
     </div>
   );

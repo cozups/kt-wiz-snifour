@@ -1,14 +1,14 @@
-import { API_URL } from '@/constants/api-url';
-import { apiLogger, styledConsole } from '@/lib';
-import axios, { AxiosError } from 'axios';
+import { API_URL } from "@/constants/api-url";
+import { apiLogger, styledConsole } from "@/lib";
+import axios, { AxiosError } from "axios";
 
-const isDev = import.meta.env.MODE === 'development';
+const isDev = import.meta.env.MODE === "development";
 
 const instance = axios.create({
   baseURL: API_URL,
   timeout: 5000,
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
 });
 
@@ -43,7 +43,7 @@ instance.interceptors.response.use(
       const { response: res, config: reqData } = error || {};
 
       if (!res?.status) {
-        throw new Error('response status is not exist');
+        throw new Error("response status is not exist");
       }
 
       const { status } = res;
@@ -53,7 +53,7 @@ instance.interceptors.response.use(
       // 444 에러처리 등 (토큰 등)
 
       if (isDev) {
-        apiLogger({ status, reqData, resData: error, method: 'error' });
+        apiLogger({ status, reqData, resData: error, method: "error" });
       }
 
       // 여기서 error를 그대로 reject한 후
@@ -62,11 +62,12 @@ instance.interceptors.response.use(
     } catch (e) {
       styledConsole({
         //
-        method: 'error',
-        topic: 'UN_HANDLED',
-        title: 'axios-interceptor',
+        method: "error",
+        topic: "UN_HANDLED",
+        title: "axios-interceptor",
         data: e,
       });
+      return Promise.reject(error);
     }
   }
 );

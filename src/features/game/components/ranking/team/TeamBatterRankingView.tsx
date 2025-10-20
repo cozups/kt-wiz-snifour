@@ -1,19 +1,19 @@
-import { TeamRankingBatterConfig } from '@/constants/chart-config';
-import { teamBatterRankColumns } from '@/constants/columns/team-rank-colums';
-import { TeamBatterRank } from '@/features/common';
-import { TeamRankingView } from '@/features/game';
-import { useTeamRank } from '@/features/game/hooks/ranking/useTeamRank';
+import { TeamRankingBatterConfig } from "@/constants/chart-config";
+import { teamBatterRankColumns } from "@/constants/columns/team-rank-colums";
+import { TeamBatterRank } from "@/features/common";
+import { TeamRankingView } from "@/features/game";
+// import { useTeamRank } from "@/features/game/hooks/ranking/useTeamRank";
+import data from "@/assets/data/__test__/mockRanking.json";
 
 function TeamBatterRankingView() {
-  const { ranking, isLoading, isError, error } = useTeamRank('batter');
+  // const { ranking, isLoading, isError, error } = useTeamRank("batter");
 
-  if (isError) {
-    return <div>{error?.toString()}</div>;
-  }
+  // if (isError) {
+  //   throw new Error(error?.toString());
+  // }
 
-  if (!ranking?.length) {
-    return null;
-  }
+  const ranking = data.teamBatter.sort((a, b) => Number(b.hra) - Number(a.hra));
+  const isLoading = false;
 
   return (
     <>
@@ -23,7 +23,7 @@ function TeamBatterRankingView() {
         chartData={ranking as TeamBatterRank[]}
         columns={teamBatterRankColumns}
         chartConfig={TeamRankingBatterConfig}
-        loading={isLoading}
+        isLoading={isLoading}
         domain="all"
       />
     </>
