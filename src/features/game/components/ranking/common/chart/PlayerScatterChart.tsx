@@ -1,29 +1,20 @@
-import { SubTitle } from '@/features/common';
-import { OverallBatterRank, OverallPitcherRank } from '@/features/common';
-import { assignColor } from '@/features/game/services/assing-color.service';
-import { cn } from '@/lib/utils';
-import { useEffect, useMemo, useState } from 'react';
-import Skeleton from 'react-loading-skeleton';
-import {
-  CartesianGrid,
-  Cell,
-  ResponsiveContainer,
-  Scatter,
-  ScatterChart,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from 'recharts';
-import { Props } from 'recharts/types/container/Surface';
-import { CellLegend } from './CellLegend';
-import { CustomTooltip } from './CustomTooltip';
+import { SubTitle } from "@/features/common";
+import { OverallBatterRank, OverallPitcherRank } from "@/features/common";
+import { assignColor } from "@/features/game/services/assing-color.service";
+import { cn } from "@/lib/utils";
+import { useEffect, useMemo, useState } from "react";
+import Skeleton from "react-loading-skeleton";
+import { CartesianGrid, Cell, ResponsiveContainer, Scatter, ScatterChart, Tooltip, XAxis, YAxis } from "recharts";
+import { Props } from "recharts/types/container/Surface";
+import { CellLegend } from "./CellLegend";
+import { CustomTooltip } from "./CustomTooltip";
 
 type PlayerRank = OverallPitcherRank | OverallBatterRank;
 
 interface PlayerScatterChartProps<T extends PlayerRank> {
   data: T[];
   loading?: boolean;
-  position: 'pitcher' | 'batter';
+  position: "pitcher" | "batter";
 }
 
 interface CellProps<T extends PlayerRank> {
@@ -32,12 +23,8 @@ interface CellProps<T extends PlayerRank> {
   payload: T & { color: string };
 }
 
-function PlayerScatterChart<T extends PlayerRank>({
-  data,
-  position,
-  loading = false,
-}: PlayerScatterChartProps<T>) {
-  const [fontSize, setFontSize] = useState('16px');
+function PlayerScatterChart<T extends PlayerRank>({ data, position, loading = false }: PlayerScatterChartProps<T>) {
+  const [fontSize, setFontSize] = useState("16px");
   const [aspect, setAspect] = useState(3);
   const [cellSize, setCellSize] = useState({
     width: 30,
@@ -45,20 +32,20 @@ function PlayerScatterChart<T extends PlayerRank>({
   });
 
   const { x, y, xLabel, yLabel } = useMemo(() => {
-    return position === 'pitcher'
-      ? { x: 'wra', xLabel: '승률', y: 'era', yLabel: '평균자책점' }
-      : { x: 'hra', xLabel: '타율', y: 'ops', yLabel: 'OPS' };
+    return position === "pitcher"
+      ? { x: "wra", xLabel: "승률", y: "era", yLabel: "평균자책점" }
+      : { x: "hra", xLabel: "타율", y: "ops", yLabel: "OPS" };
   }, [position]);
 
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth < 768) {
         // 모바일 화면 크기 기준
-        setFontSize('10px');
+        setFontSize("10px");
         setAspect(2);
         setCellSize({ width: 18, height: 18 });
       } else {
-        setFontSize('16px');
+        setFontSize("16px");
         setAspect(3);
         setCellSize({ width: 30, height: 30 });
       }
@@ -67,10 +54,10 @@ function PlayerScatterChart<T extends PlayerRank>({
     // 초기 화면 크기 설정
     handleResize();
     // 화면 크기 변경 감지
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
 
     return () => {
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener("resize", handleResize);
     };
   }, []);
 
@@ -78,24 +65,21 @@ function PlayerScatterChart<T extends PlayerRank>({
     const filteredData = data
       .filter((player) => player.gamenum >= 10)
       .sort((a, b) => {
-        if (position === 'pitcher') {
+        if (position === "pitcher") {
           return (
-            Number((b as OverallPitcherRank).wra) /
-              Number((b as OverallPitcherRank).era) -
-            Number((a as OverallPitcherRank).wra) /
-              Number((a as OverallPitcherRank).era)
+            Number((b as OverallPitcherRank).wra) / Number((b as OverallPitcherRank).era) -
+            Number((a as OverallPitcherRank).wra) / Number((a as OverallPitcherRank).era)
           );
         }
 
         return (
           Number((b as OverallBatterRank).ops) +
           Number((b as OverallBatterRank).hra) -
-          (Number((a as OverallBatterRank).ops) +
-            Number((a as OverallBatterRank).hra))
+          (Number((a as OverallBatterRank).ops) + Number((a as OverallBatterRank).hra))
         );
       });
 
-    if (position === 'pitcher') {
+    if (position === "pitcher") {
       return filteredData.map((pitcher, index) => ({
         ...pitcher,
         era: Number((pitcher as OverallPitcherRank).era),
@@ -121,12 +105,7 @@ function PlayerScatterChart<T extends PlayerRank>({
         width={cellSize.width} // 이미지 너비
         height={cellSize.height} // 이미지 높이
       >
-        <div
-          className={cn(
-            'w-full h-full rounded-full p-0.5 md:p-1',
-            payload.color
-          )}
-        >
+        <div className={cn("w-full h-full rounded-full p-0.5 md:p-1", payload.color)}>
           <img
             src={payload.playerPrvwImg}
             alt={payload.playerName}
@@ -141,9 +120,7 @@ function PlayerScatterChart<T extends PlayerRank>({
     <div>
       <SubTitle title={`${xLabel}과 ${yLabel} 비교`} />
       <div className="text-neutral-500 mb-1 md:mb-2 lg:mb-4">
-        <p className={cn('text-xs md:text-sm lg:text-base')}>
-          10경기 이상 출장한 선수만 표시합니다.
-        </p>
+        <p className={cn("text-xs md:text-sm lg:text-base")}>10경기 이상 출장한 선수만 표시합니다.</p>
         <div className="flex items-center gap-4 text-xs md:text-sm lg:text-base">
           <CellLegend color="#059212" label="상위권" />
           <CellLegend color="#ffba08" label="중위권" />
@@ -165,11 +142,11 @@ function PlayerScatterChart<T extends PlayerRank>({
               dataKey={x}
               label={{
                 value: xLabel,
-                position: 'insideBottom',
+                position: "insideBottom",
                 fontSize,
               }}
               height={50}
-              domain={['dataMin', 'auto']}
+              domain={["dataMin", "auto"]}
               tick={{ fontSize }}
             />
             <YAxis
@@ -178,21 +155,14 @@ function PlayerScatterChart<T extends PlayerRank>({
               label={{
                 value: yLabel,
                 angle: 90,
-                position: 'insideLeft',
+                position: "insideLeft",
                 fontSize,
               }}
-              domain={['dataMin', 'auto']}
+              domain={["dataMin", "auto"]}
               tick={{ fontSize }}
             />
-            <Tooltip
-              content={<CustomTooltip type={position} />}
-              cursor={{ strokeDasharray: '3 3' }}
-            />
-            <Scatter
-              name={`${xLabel}과 ${yLabel} 비교`}
-              data={chartData}
-              shape={renderImageCell}
-            >
+            <Tooltip content={<CustomTooltip type={position} />} cursor={{ strokeDasharray: "3 3" }} />
+            <Scatter name={`${xLabel}과 ${yLabel} 비교`} data={chartData} shape={renderImageCell}>
               {data.map((entry) => (
                 <Cell key={entry.pcode} />
               ))}

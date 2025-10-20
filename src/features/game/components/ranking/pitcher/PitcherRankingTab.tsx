@@ -5,13 +5,13 @@ import { ErrorBoundary } from "react-error-boundary";
 import { Tabs, TabsContent, TabsList } from "@/components/ui";
 import { seasons } from "@/constants/seasons";
 import { Breadcrumb, CustomSelect, SubTabsTrigger } from "@/features/common";
-import { PitcherRankingView, RankingCard } from "@/features/game";
+import { PlayerRankingView, RankingCard } from "@/features/game";
 import { ErrorFallback } from "@/features/common/components/ErrorFallback";
 import { cn } from "@/lib/utils";
 
 const TABS = [
-  { value: "ktPitchers", component: <PitcherRankingView domain="kt" /> },
-  { value: "allPitchers", component: <PitcherRankingView domain="all" /> },
+  { value: "ktPitchers", component: <PlayerRankingView position="pitcher" domain="kt" /> },
+  { value: "allPitchers", component: <PlayerRankingView position="pitcher" domain="all" /> },
 ];
 
 function PitcherRankingTab() {

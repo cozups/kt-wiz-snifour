@@ -3,12 +3,11 @@ export { BoxscoreTab } from "./BoxScoreTab";
 export { MatchScheduleTab } from "./MatchScheduleTab";
 export { WatchPointTab } from "./WatchPointTab";
 export { RankingTab } from "./RankingTab";
+// common
+export { PlayerRankingView } from "@/features/game/components/ranking/common/PlayerRankingView";
 // batter
-export { AllBatterRankingTab } from "@/features/game/components/ranking/batter/AllBatterRankingTab";
 export { BatterRankingTab } from "@/features/game/components/ranking/batter/BatterRankingTab";
-export { KTBatterRankingTab } from "@/features/game/components/ranking/batter/KTBatterRankingTab";
 // pitcher
-export { PitcherRankingView } from "@/features/game/components/ranking/pitcher/PitcherRankingView";
 export { PitcherRankingTab } from "@/features/game/components/ranking/pitcher/PitcherRankingTab";
 // crowd
 export { CrowdRankingTab } from "@/features/game/components/ranking/crowd/CrowdRankingTab";

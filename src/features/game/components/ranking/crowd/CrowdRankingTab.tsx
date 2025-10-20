@@ -1,19 +1,14 @@
-import { crowdRankColumns } from '@/constants/columns/crowd-columns';
-import { seasons } from '@/constants/seasons';
-import {
-  Breadcrumb,
-  CustomSelect,
-  DataTable,
-  SubTitle,
-} from '@/features/common';
-import { useCrowdRank } from '@/features/game/hooks/ranking';
-import { useSearchParams } from 'react-router';
-import { CrowdRankingChart } from './CrowdRankingChart';
+import { crowdRankColumns } from "@/constants/columns/crowd-columns";
+import { seasons } from "@/constants/seasons";
+import { Breadcrumb, CustomSelect, DataTable, SubTitle } from "@/features/common";
+import { useCrowdRank } from "@/features/game/hooks/ranking";
+import { useSearchParams } from "react-router";
+import { CrowdRankingChart } from "./CrowdRankingChart";
 
 function CrowdRankingTab() {
   const [searchParams, setSearchParams] = useSearchParams();
   const { ranking, isLoading, isError, error } = useCrowdRank();
-  const season = searchParams.get('gyear') || seasons[0];
+  const season = searchParams.get("gyear") || seasons[0];
 
   if (isError) {
     return <div>{error?.toString()}</div>;
@@ -45,12 +40,7 @@ function CrowdRankingTab() {
 
       <div>
         <CrowdRankingChart data={ranking} loading={isLoading} />
-        <DataTable
-          data={ranking}
-          columns={crowdRankColumns}
-          domain="all"
-          loading={isLoading}
-        />
+        <DataTable data={ranking} columns={crowdRankColumns} domain="all" />
       </div>
     </div>
   );
