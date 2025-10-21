@@ -1,57 +1,24 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui';
-import { CalenderBody, MatchCalendarCell } from '@/features/game';
-import { useGetMatchScheduleQuery } from '@/features/game/apis/match-schedule/matchScheduleApi.query';
-import { useMatchStore } from '@/store/useMatchStore';
-import { format } from 'date-fns';
-import { useState } from 'react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui";
+import { ErrorFallback } from "@/features/common/components/ErrorFallback";
+import { CalenderBody } from "@/features/game";
+import { useState } from "react";
+import { ErrorBoundary } from "react-error-boundary";
 
 const GAME_TABS_CONFIG = [
-  { value: 'ktWiz', label: 'KT Wiz 경기' },
-  { value: 'allLeague', label: '전체 리그' },
+  { value: "ktWiz", label: "KT Wiz 경기" },
+  { value: "allLeague", label: "전체 리그" },
 ];
 
 const MatchCalendar = () => {
-  const [currentTab, setCurrentTab] = useState<'ktWiz' | 'allLeague'>('ktWiz');
-  const { currentMonth } = useMatchStore();
-
-  const { matchData: ktMatchData } = useGetMatchScheduleQuery({ currentMonth });
-
-  // '전체 리그 경기' 데이터
-  const { matchData: allMatchData } = useGetMatchScheduleQuery({
-    currentMonth,
-    type: 'all',
-  });
-
-  const renderCellContent = (date: Date) => {
-    const formattedDate = format(date, 'yyyyMMdd');
-    const match = ktMatchData?.find(
-      (item) => item.gameDate.toString() === formattedDate
-    );
-    const matches = allMatchData?.filter(
-      (item) => item.gameDate.toString() === formattedDate
-    );
-
-    return (
-      <MatchCalendarCell
-        date={date}
-        ktMatchData={match}
-        allMatchData={matches || []}
-        currentTab={currentTab}
-      />
-    );
-  };
+  const [currentTab, setCurrentTab] = useState<"ktWiz" | "allLeague">("ktWiz");
 
   const handleTabChange = (value: string) => {
-    setCurrentTab(value as 'ktWiz' | 'allLeague');
+    setCurrentTab(value as "ktWiz" | "allLeague");
   };
 
   return (
     <div className="w-full my-10">
-      <Tabs
-        className="media-container"
-        defaultValue={currentTab}
-        onValueChange={handleTabChange}
-      >
+      <Tabs className="media-container" defaultValue={currentTab} onValueChange={handleTabChange}>
         <div className="flex justify-between items-center pb-3 mb-5 mt-10">
           {/* 탭 */}
           <TabsList className="media-tabs-list">
@@ -59,9 +26,7 @@ const MatchCalendar = () => {
               <TabsTrigger
                 key={tab.value}
                 value={tab.value}
-                onClick={() =>
-                  handleTabChange(tab.value as 'ktWiz' | 'allLeague')
-                }
+                onClick={() => handleTabChange(tab.value as "ktWiz" | "allLeague")}
               >
                 {tab.label}
               </TabsTrigger>
@@ -75,10 +40,14 @@ const MatchCalendar = () => {
         </div>
         {/* 탭 컨텐츠 */}
         <TabsContent value="ktWiz">
-          <CalenderBody renderCellContent={renderCellContent} />
+          <ErrorBoundary fallbackRender={ErrorFallback}>
+            <CalenderBody />
+          </ErrorBoundary>
         </TabsContent>
         <TabsContent value="allLeague">
-          <CalenderBody renderCellContent={renderCellContent} />
+          <ErrorBoundary fallbackRender={ErrorFallback}>
+            <CalenderBody type="all" />
+          </ErrorBoundary>
         </TabsContent>
       </Tabs>
     </div>

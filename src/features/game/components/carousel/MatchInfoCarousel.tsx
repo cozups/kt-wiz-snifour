@@ -1,28 +1,20 @@
-import {
-  Carousel,
-  CarouselApi,
-  CarouselContent,
-  CarouselNext,
-  CarouselPrevious,
-} from '@/components/ui';
-import { CarouselCard } from '@/features/game';
-import useGetRecentMatchScheduleQuery from '@/features/game/apis/match-schedule/RecentScheduleApi.query';
-import { useGetMatchScheduleQuery } from '@/features/game/apis/match-schedule/matchScheduleApi.query';
-import { parseDate, selectTypeAndMonth } from '@/lib/helpers/parse-date';
-import { useMatchStore } from '@/store/useMatchStore';
-import { isValid, parse } from 'date-fns';
-import { useEffect, useMemo, useState } from 'react';
+import { Carousel, CarouselApi, CarouselContent, CarouselNext, CarouselPrevious } from "@/components/ui";
+import { CarouselCard } from "@/features/game";
+import useGetRecentMatchScheduleQuery from "@/features/game/apis/match-schedule/RecentScheduleApi.query";
+import { useGetMatchScheduleQuery } from "@/features/game/apis/match-schedule/matchScheduleApi.query";
+import { parseDate, selectTypeAndMonth } from "@/lib/helpers/parse-date";
+import { useMatchStore } from "@/store/useMatchStore";
+import { isValid, parse } from "date-fns";
+import { useEffect, useMemo, useState } from "react";
+import { MatchInfoCarouselSkeleton } from "../skeleton/MatchInfoCarouselSkeleton";
 
 const MatchInfoCarousel = () => {
   const [carouselApi, setCarouselApi] = useState<CarouselApi | null>(null);
   const { currentMonth, selectedDate } = useMatchStore();
-  const { data: recentMatchData } = useGetRecentMatchScheduleQuery();
+  const { data: recentMatchData, isError, error, isLoading } = useGetRecentMatchScheduleQuery();
 
   // recentMonth 계산
-  const recentMonth = useMemo(
-    () => parseDate(recentMatchData?.current.gameDate?.toString()),
-    [recentMatchData]
-  );
+  const recentMonth = useMemo(() => parseDate(recentMatchData?.current.gameDate?.toString()), [recentMatchData]);
 
   // type, queryMonth 결정
   const { type, queryMonth } = useMemo(
@@ -42,14 +34,8 @@ const MatchInfoCarousel = () => {
     if (!selectedDate || !carouselApi || matchData.length === 0) return;
 
     const selectedIndex = matchData.findIndex((game) => {
-      const parsedDate = parse(
-        game.gameDate?.toString(),
-        'yyyyMMdd',
-        new Date()
-      );
-      return (
-        isValid(parsedDate) && parsedDate.getTime() === selectedDate.getTime()
-      );
+      const parsedDate = parse(game.gameDate?.toString(), "yyyyMMdd", new Date());
+      return isValid(parsedDate) && parsedDate.getTime() === selectedDate.getTime();
     });
 
     if (selectedIndex !== -1) {
@@ -57,18 +43,23 @@ const MatchInfoCarousel = () => {
     }
   }, [selectedDate, matchData, carouselApi]);
 
+  if (isError) {
+    throw new Error(error?.toString());
+  }
+
+  if (isLoading) {
+    return <MatchInfoCarouselSkeleton />;
+  }
+
   const today = new Date();
   const hasUpcomingGames = matchData.some((game) => {
-    const parsedDate = parse(game.gameDate?.toString(), 'yyyyMMdd', new Date());
+    const parsedDate = parse(game.gameDate?.toString(), "yyyyMMdd", new Date());
     return isValid(parsedDate) && parsedDate >= today;
   });
 
   return (
     <div className="w-full max-w-2xl min-w-full overflow:hidden">
-      <Carousel
-        setApi={(api) => setCarouselApi(api)}
-        className="relative max-w-full"
-      >
+      <Carousel setApi={(api) => setCarouselApi(api)} className="relative max-w-full">
         <CarouselContent className="-ml-1">
           {matchData.map((data, index) => (
             <CarouselCard key={`${data.gameDate}-${index}`} data={data} />

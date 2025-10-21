@@ -1,16 +1,36 @@
-import { CalendarHeader } from '@/features/game';
-import { useMatchStore } from '@/store/useMatchStore';
-import { format } from 'date-fns';
-import { ko } from 'date-fns/locale';
-import { DayPicker } from 'react-day-picker';
+import { CalendarHeader, MatchCalendarCell } from "@/features/game";
+import { useMatchStore } from "@/store/useMatchStore";
+import { format } from "date-fns";
+import { ko } from "date-fns/locale";
+import { DayPicker } from "react-day-picker";
+import { useGetMatchScheduleQuery } from "../../apis/match-schedule/matchScheduleApi.query";
+import Skeleton from "react-loading-skeleton";
 
 interface CalenderBodyProps {
-  renderCellContent: (date: Date) => React.ReactNode;
+  // renderCellContent: (date: Date) => React.ReactNode;
+  type?: "kt" | "all";
 }
 
-const CalenderBody = ({ renderCellContent }: CalenderBodyProps) => {
-  const { currentMonth, setCurrentMonth, selectedDate, setSelectedDate } =
-    useMatchStore();
+const CalenderBody = ({ type = "kt" }: CalenderBodyProps) => {
+  const { currentMonth, setCurrentMonth, selectedDate, setSelectedDate } = useMatchStore();
+
+  const { matchData, isError, error, isLoading } = useGetMatchScheduleQuery({ currentMonth, type });
+
+  if (isLoading) {
+    return <Skeleton className="w-full h-[48rem]" />;
+  }
+
+  if (isError) {
+    throw new Error(error?.toString());
+  }
+
+  const renderCellContent = (date: Date) => {
+    const formattedDate = format(date, "yyyyMMdd");
+
+    const matches = matchData?.filter((item) => item.gameDate.toString() === formattedDate);
+
+    return <MatchCalendarCell date={date} data={matches || []} type={type} />;
+  };
 
   return (
     <DayPicker
@@ -20,9 +40,9 @@ const CalenderBody = ({ renderCellContent }: CalenderBodyProps) => {
       locale={ko}
       className="border border-[#fefefe40] rounded-lg w-full max-w-full mx-auto  overflow-hidden"
       classNames={{
-        table: 'w-full border-collapse overflow-hidden',
-        cell: 'h-[120px] md:h-[180px] w-[160px] text-center p-0 border border-[#fefefe40] relative',
-        day: 'h-full w-full text-sm flex items-center justify-center relative',
+        table: "w-full border-collapse overflow-hidden",
+        cell: "h-[120px] md:h-[180px] w-[160px] text-center p-0 border border-[#fefefe40] relative",
+        day: "h-full w-full text-sm flex items-center justify-center relative",
       }}
       captionLayout="dropdown"
       defaultMonth={new Date()}
@@ -31,24 +51,15 @@ const CalenderBody = ({ renderCellContent }: CalenderBodyProps) => {
       fromMonth={new Date(2024, 6)}
       toMonth={new Date(2025, 9)}
       components={{
-        Caption: (props) => (
-          <CalendarHeader
-            displayMonth={props.displayMonth}
-            setCurrentMonth={setCurrentMonth}
-          />
-        ),
+        Caption: (props) => <CalendarHeader displayMonth={props.displayMonth} setCurrentMonth={setCurrentMonth} />,
         Head: () => (
           <thead>
             <tr className="bg-wiz-white bg-opacity-10">
-              {['일', '월', '화', '수', '목', '금', '토'].map((day, index) => (
+              {["일", "월", "화", "수", "목", "금", "토"].map((day, index) => (
                 <th
                   key={day}
                   className={`p-2 font-medium text-xs text-md:sm lg:text-base ${
-                    index === 0
-                      ? 'text-red-500'
-                      : index === 6
-                        ? 'text-blue-500'
-                        : 'text-wiz-white'
+                    index === 0 ? "text-red-500" : index === 6 ? "text-blue-500" : "text-wiz-white"
                   }`}
                 >
                   {day}
@@ -60,9 +71,7 @@ const CalenderBody = ({ renderCellContent }: CalenderBodyProps) => {
         DayContent: ({ date }) => (
           <div
             className={`relative w-full h-full bg-wiz-white bg-opacity-5 ${
-              format(date, 'yyyy-MM-dd') === format(new Date(), 'yyyy-MM-dd')
-                ? 'border-2 border-wiz-red'
-                : ''
+              format(date, "yyyy-MM-dd") === format(new Date(), "yyyy-MM-dd") ? "border-2 border-wiz-red" : ""
             }`}
           >
             {renderCellContent(date)}
