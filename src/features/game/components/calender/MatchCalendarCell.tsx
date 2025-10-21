@@ -84,8 +84,10 @@ const MatchCalendarCell = ({ date, data, type = "kt" }: MatchCalendarCellProps) 
                 key={match.gmkey}
                 className={`${isKTGame ? "text-wiz-red" : "text-wiz-white"} text-[7px] md:text-[10px] lg:text-base`}
               >
-                {match.home} {match.homeScore || "-"} : {match.visit}
-                {match.visitScore || "-"} <span className="hidden md:inline">[{match.stadium}]</span>
+                <span className="mr-1">
+                  {match.home} {match.homeScore || "-"} : {match.visit} {match.visitScore || "-"}
+                </span>
+                <span className="hidden md:inline">[{match.stadium}]</span>
               </p>
             );
           })}

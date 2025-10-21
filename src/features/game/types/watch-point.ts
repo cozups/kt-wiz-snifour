@@ -1,4 +1,4 @@
-import { GameSchedule } from '@/features/game';
+import { GameSchedule } from "@/features/game";
 
 export interface StartingPitcher {
   babip: string;
