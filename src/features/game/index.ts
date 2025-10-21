@@ -23,11 +23,9 @@ export { MatchCalendarCell } from "./components/calender/MatchCalendarCell";
 // card
 export { KeyRecordsCard } from "./components/card/KeyRecordsCard";
 //table
-export { BattingRecordTable } from "./components/table/BattingRecordTable";
 export { KeyRecordsTable } from "./components/table/KeyRecordsTable";
 export { MatchScoreTable } from "./components/table/MatchScoreTable";
 export { MatchSummaryTable } from "./components/table/MatchSummaryTable";
-export { PitchingRecordTable } from "./components/table/PitchingRecordTable";
 // carousel
 export { CarouselCard } from "./components/carousel/CarouselCard";
 export { MatchInfoCarousel } from "./components/carousel/MatchInfoCarousel";

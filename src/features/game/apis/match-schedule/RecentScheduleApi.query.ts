@@ -1,30 +1,33 @@
-// import { useMatchStore } from "@/store/useMatchStore";
+import { useMatchStore } from "@/store/useMatchStore";
 import { useQuery } from "@tanstack/react-query";
-// import { isValid, parse } from "date-fns";
+import { isValid, parse } from "date-fns";
 // import { scheduleApi } from "./matchScheduleApi";
 import data from "@/assets/data/__test__/mockGames.json";
 // 최근 경기 쿼리 키
 export const RECENT_MATCHES_QUERY_KEY = ["recentMatches"];
 
 const useGetRecentMatchScheduleQuery = () => {
-  // const { setRecentMonth } = useMatchStore();
+  const { setRecentMonth } = useMatchStore();
 
   const fetchFn = async () => {
+    const response = { data: data.recentMatch };
     // const response = await scheduleApi.getRecentSchedule();
+    console.log({ response: response });
+    const gameDate = response?.data?.current.gameDate;
 
-    // if (response?.data?.current.gameDate) {
-    //   // gameDate를 Date 객체로 변환
-    //   const parsedDate = parse(String(response.data.current.gameDate), "yyyyMMdd", new Date());
+    if (gameDate) {
+      // gameDate를 Date 객체로 변환
+      const parsedDate = parse(String(gameDate), "yyyyMMdd", new Date());
 
-    //   if (isValid(parsedDate)) {
-    //     setRecentMonth(parsedDate);
-    //   } else {
-    //     console.error("날짜 형식 확인 ==> ", response.data.current.gameDate);
-    //   }
-    // }
+      if (isValid(parsedDate)) {
+        setRecentMonth(parsedDate);
+      } else {
+        console.error("날짜 형식 확인 ==> ", gameDate);
+      }
+    }
 
     // return response;
-    return Promise.resolve({ data: data.recentMatches });
+    return Promise.resolve(response);
   };
 
   return useQuery({

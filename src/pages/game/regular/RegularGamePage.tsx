@@ -4,6 +4,9 @@ import { BoxscoreTab, MatchScheduleTab, RankingTab, WatchPointTab } from "@/feat
 import { useTabFromUrl } from "@/hooks/useTabFromUrl";
 
 import "@/features/game/css/game.css";
+import { TabWrapper } from "@/features/game/components/common/TabWrapper";
+import { ErrorBoundary } from "react-error-boundary";
+import { ErrorFallback } from "@/features/common/components/ErrorFallback";
 
 const REG_TABS_CONFIG = [
   { value: "schedule", path: "/regular/schedule" },
@@ -62,16 +65,24 @@ function RegularGamePage() {
         </div>
         {/* 탭 컨텐츠 */}
         <TabsContent value="schedule">
-          <MatchScheduleTab />
+          <TabWrapper>
+            <MatchScheduleTab />
+          </TabWrapper>
         </TabsContent>
         <TabsContent value="boxscore">
-          <BoxscoreTab />
+          <TabWrapper>
+            <ErrorBoundary fallbackRender={ErrorFallback}>
+              <BoxscoreTab />
+            </ErrorBoundary>
+          </TabWrapper>
         </TabsContent>
         <TabsContent value="ranking">
           <RankingTab />
         </TabsContent>
         <TabsContent value="watchpoint">
-          <WatchPointTab />
+          <TabWrapper>
+            <WatchPointTab />
+          </TabWrapper>
         </TabsContent>
       </Tabs>
     </Layout>
