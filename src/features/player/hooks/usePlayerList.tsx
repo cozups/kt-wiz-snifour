@@ -1,5 +1,7 @@
-import { useGetPlayerList } from '@/features/player/apis/playerApi.query';
-import { useParams } from 'react-router';
+import { PLAYER_API_QUERY_KEY } from "@/features/player/apis/playerApi.query";
+import { useQuery } from "@tanstack/react-query";
+import { useParams } from "react-router";
+import { playerApi } from "../apis/playerApi";
 
 export const usePlayerList = () => {
   const { position } = useParams();
@@ -7,12 +9,11 @@ export const usePlayerList = () => {
     position,
   };
 
-  const {
-    data: playerList,
-    isLoading,
-    isError,
-    error,
-  } = useGetPlayerList({ variables });
-
-  return { playerList, isLoading, isError, error };
+  return useQuery({
+    queryKey: PLAYER_API_QUERY_KEY.GET_PLAYER_LIST(variables),
+    queryFn: async () => {
+      const response = await playerApi.getPlayerList(variables);
+      return response.data;
+    },
+  });
 };

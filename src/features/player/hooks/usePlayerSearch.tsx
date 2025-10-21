@@ -1,16 +1,13 @@
-import { useSearchParams } from 'react-router';
-import { usePlayerList } from './usePlayerList';
+import { useParams, useSearchParams } from "react-router";
+import { useQuery } from "@tanstack/react-query";
+import { PLAYER_API_QUERY_KEY } from "../apis/playerApi.query";
+import { playerApi } from "../apis/playerApi";
 
 function usePlayerSearch() {
-  const { playerList, isLoading, isError, error } = usePlayerList();
+  const { position } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const searchWord = searchParams.get('searchWord') || '';
-
-  // 검색 결과 필터링
-  const filteredPlayerList = playerList?.filter((player) =>
-    player.playerName.toLowerCase().includes(searchWord.toLowerCase())
-  );
+  const searchWord = searchParams.get("searchWord") || "";
 
   const handleSearch = (searchWord: string) => {
     setSearchParams({
@@ -19,11 +16,22 @@ function usePlayerSearch() {
     });
   };
 
+  const playerQuery = useQuery({
+    queryKey: PLAYER_API_QUERY_KEY.GET_PLAYER_LIST({ position }),
+    queryFn: async () => {
+      const response = await playerApi.getPlayerList({ position });
+      return response.data;
+    },
+    select: (data) => {
+      const filteredPlayerList = data?.filter((player) =>
+        player.playerName.toLowerCase().includes(searchWord.toLowerCase())
+      );
+      return filteredPlayerList;
+    },
+  });
+
   return {
-    filteredPlayerList,
-    isLoading,
-    isError,
-    error,
+    ...playerQuery,
     searchWord,
     handleSearch,
   };
