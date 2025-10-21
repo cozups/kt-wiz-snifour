@@ -1,24 +1,30 @@
-import { WatchPointData } from '@/features/game';
-import { useQuery } from '@tanstack/react-query';
-import { watchPointApi } from './watchPointApi';
+import { useQuery } from "@tanstack/react-query";
+// import { watchPointApi } from "./watchPointApi";
+import useGetRecentMatchScheduleQuery from "../match-schedule/RecentScheduleApi.query";
+import data from "@/assets/data/__test__/mockGames.json";
 
 // 관전포인트 쿼리 키
-export const WATCH_POINT_QUERY_KEY = (gameDate: string, gmkey: string) => [
-  'watchPoint',
-  gameDate,
-  gmkey,
-];
+export const WATCH_POINT_QUERY_KEY = (gameDate: string, gamekey: string) => ["watchPoint", gameDate, gamekey];
 
-const useGetWatchPointQuery = (gameDate: string, gmkey: string) => {
+const useGetWatchPointQuery = (gameDate?: string, gamekey?: string) => {
+  const { data: recentMatchData } = useGetRecentMatchScheduleQuery();
+
+  const queryGameDate = gameDate || recentMatchData?.current.gameDate.toString() || "";
+  const queryGameKey = gamekey || recentMatchData?.current.gmkey || "";
+
   const {
     data: watchData,
     isLoading: loading,
     error,
-  } = useQuery<WatchPointData, Error>({
-    queryKey: WATCH_POINT_QUERY_KEY(gameDate, gmkey),
-    queryFn: () => watchPointApi.getWatchPoint(gameDate, gmkey),
+  } = useQuery({
+    queryKey: WATCH_POINT_QUERY_KEY(queryGameDate, queryGameKey),
+    queryFn: async () => {
+      // const response = await watchPointApi.getWatchPoint(queryGameDate, queryGameKey);
+      // return response;
+      return Promise.resolve(data.watchpoint);
+    },
+    enabled: !!queryGameDate && !!queryGameKey,
     staleTime: 5 * 60 * 1000,
-    enabled: !!gameDate && !!gmkey,
   });
 
   return { watchData, loading, error: error?.message || null };

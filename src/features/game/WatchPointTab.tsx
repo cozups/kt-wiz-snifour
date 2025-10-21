@@ -1,32 +1,18 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Skeleton from "react-loading-skeleton";
 
 import { SubTitle } from "@/features/common";
 import { MatchBoard, MatchSummaryTable, StartingPitcherChart, StartingPitcherTable, TeamLineup } from "@/features/game";
-import useGetRecentMatchScheduleQuery from "./apis/match-schedule/RecentScheduleApi.query";
 import useGetWatchPointQuery from "./apis/watch-point/watchPointApi.query";
 
 const WatchPointTab = () => {
   const [gameDate, setGameDate] = useState<string | null>(null);
   const [gameKey, setGameKey] = useState<string | null>(null);
 
-  const { data: recentMatchData, isLoading: recentLoading, error: recentError } = useGetRecentMatchScheduleQuery();
-
-  useEffect(() => {
-    if (recentMatchData?.current) {
-      setGameDate(String(recentMatchData.current.gameDate));
-      setGameKey(String(recentMatchData.current.gmkey));
-    }
-  }, [recentMatchData]);
-
   const { watchData, loading, error } = useGetWatchPointQuery(gameDate || "", gameKey || "");
 
-  if (recentError || error) {
-    return (
-      <div>
-        <p>Error: {recentError?.message || error}</p>
-      </div>
-    );
+  if (error) {
+    throw new Error(error);
   }
 
   // 날짜 변경 핸들러
@@ -43,7 +29,7 @@ const WatchPointTab = () => {
   return (
     <>
       {/* 경기 정보 보드 */}
-      {loading || recentLoading || !watchData ? (
+      {loading || !watchData ? (
         <div className="bg-gray-200 animate-pulse rounded-lg w-full">
           <Skeleton height={340} className="w-full mb-10" />
         </div>

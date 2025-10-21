@@ -81,7 +81,9 @@ function RegularGamePage() {
         </TabsContent>
         <TabsContent value="watchpoint">
           <TabWrapper>
-            <WatchPointTab />
+            <ErrorBoundary fallbackRender={ErrorFallback}>
+              <WatchPointTab />
+            </ErrorBoundary>
           </TabWrapper>
         </TabsContent>
       </Tabs>
