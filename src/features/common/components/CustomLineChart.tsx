@@ -1,11 +1,10 @@
 import { ChartContainer } from "@/components/ui";
-import { RecentRecord, YearRecord } from "@/features/player/types/detail";
 import { useMemo } from "react";
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
 import { useResponsiveChart } from "../hooks/useResponsiveChart";
 
-interface CustomLineChartProps {
-  data: RecentRecord[] | YearRecord[];
+interface CustomLineChartProps<T> {
+  data: T[];
   config: {
     [key: string]: {
       label: string;
@@ -16,7 +15,7 @@ interface CustomLineChartProps {
   XAxisKey: string;
 }
 
-function CustomLineChart({ data, config, XAxisKey }: CustomLineChartProps) {
+function CustomLineChart<T>({ data, config, XAxisKey }: CustomLineChartProps<T>) {
   const {
     config: { fontSize },
   } = useResponsiveChart();
@@ -35,11 +34,7 @@ function CustomLineChart({ data, config, XAxisKey }: CustomLineChartProps) {
           domain={[
             0,
             () => {
-              const max = Math.max(
-                ...data.map((item: RecentRecord | YearRecord) =>
-                  Number(item[activeKey as keyof (RecentRecord | YearRecord)])
-                )
-              ); // dataMax를 사용했더니 제대로 max 값을 찾지 못하는 버그가 있어 직접 계산
+              const max = Math.max(...data.map((item: T) => Number(item[activeKey as keyof T]))); // dataMax를 사용했더니 제대로 max 값을 찾지 못하는 버그가 있어 직접 계산
               return max === 0 ? 5 : (max * 1.1).toFixed(2); // 최대값에 여유를 두고 10% 확대
             },
           ]}

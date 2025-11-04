@@ -1,6 +1,5 @@
 import { ChartContainer } from "@/components/ui";
 import { TeamBatterRank, TeamPitcherRank } from "@/features/common";
-import { RecentRecord, YearRecord } from "@/features/player/types/detail";
 import { useMemo } from "react";
 import { Bar, BarChart, CartesianGrid, Cell, XAxis, YAxis } from "recharts";
 import { useResponsiveChart } from "../hooks/useResponsiveChart";
@@ -13,20 +12,23 @@ interface Config {
   };
 }
 
-type Data = RecentRecord | YearRecord | TeamPitcherRank | TeamBatterRank;
-interface CustomBarChartProps {
-  data: Data[];
+interface CustomBarChartProps<T> {
+  data: T[];
   config: Config;
   XAxisKey: string;
   domain?: "kt" | "all";
 }
 
-function CustomBarChart({ data, config, XAxisKey, domain }: CustomBarChartProps) {
+function isTeamData(data: any): data is TeamBatterRank | TeamPitcherRank {
+  return "gd" in data;
+}
+
+function CustomBarChart<T>({ data, config, XAxisKey, domain }: CustomBarChartProps<T>) {
   const {
     config: { fontSize, maxBarSize },
   } = useResponsiveChart();
 
-  const activeKey = useMemo(() => Object.keys(config).filter((key) => config[key].isActive)[0], [config]);
+  const activeKey: keyof Config = useMemo(() => Object.keys(config).filter((key) => config[key].isActive)[0], [config]);
 
   return (
     <div>
@@ -41,7 +43,7 @@ function CustomBarChart({ data, config, XAxisKey, domain }: CustomBarChartProps)
             domain={[
               0,
               () => {
-                const max = Math.max(...data.map((item: Data) => Number(item[activeKey as keyof Data]))); // dataMax를 사용했더니 제대로 max 값을 찾지 못하는 버그가 있어 직접 계산
+                const max = Math.max(...data.map((item: T) => Number(item[activeKey as keyof T]))); // dataMax를 사용했더니 제대로 max 값을 찾지 못하는 버그가 있어 직접 계산
                 return max === 0 ? 5 : (max * 1.1).toFixed(2); // 최대값에 여유를 두고 10% 확대
               },
             ]}
@@ -58,11 +60,7 @@ function CustomBarChart({ data, config, XAxisKey, domain }: CustomBarChartProps)
               data.map((entry, index) => (
                 <Cell
                   key={`cell-${index}`}
-                  fill={
-                    (entry as TeamBatterRank | TeamPitcherRank).teamName === "KT"
-                      ? `var(--color-${activeKey})`
-                      : "#555657"
-                  }
+                  fill={isTeamData(entry) && entry.teamName === "KT" ? `var(--color-${activeKey})` : "#555657"}
                 />
               ))}
           </Bar>
