@@ -1,8 +1,9 @@
 import { ChartContainer } from "@/components/ui";
 import { TeamBatterRank, TeamPitcherRank } from "@/features/common";
 import { RecentRecord, YearRecord } from "@/features/player/types/detail";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import { Bar, BarChart, CartesianGrid, Cell, XAxis, YAxis } from "recharts";
+import { useResponsiveChart } from "../hooks/useResponsiveChart";
 
 interface Config {
   [key: string]: {
@@ -21,47 +22,11 @@ interface CustomBarChartProps {
 }
 
 function CustomBarChart({ data, config, XAxisKey, domain }: CustomBarChartProps) {
+  const {
+    config: { fontSize, maxBarSize },
+  } = useResponsiveChart();
+
   const activeKey = useMemo(() => Object.keys(config).filter((key) => config[key].isActive)[0], [config]);
-  const [fontSize, setFontSize] = useState("16px");
-  const [maxBarSize, setMaxBarSize] = useState(40);
-
-  if (!data) {
-    return null;
-  }
-
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth < 768) {
-        // 모바일 화면 크기 기준
-        setFontSize("10px");
-        setMaxBarSize(18);
-      } else {
-        setFontSize("16px");
-        setMaxBarSize(40);
-      }
-    };
-
-    // 초기 화면 크기 설정
-    handleResize();
-    // 화면 크기 변경 감지
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
-  // 차트 아래 지표 선택을 관리하는 함수
-  // const handleConfig = (dataKey: keyof Config) => {
-  //   setActiveKey(dataKey);
-  //   setChartConfig((prev) => {
-  //     if (prev[dataKey].isActive) return prev;
-
-  //     return Object.fromEntries(
-  //       Object.entries(prev).map(([key, value]) => [key, { ...value, isActive: key === dataKey }])
-  //     );
-  //   });
-  // };
 
   return (
     <div>

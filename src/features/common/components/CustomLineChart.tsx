@@ -1,7 +1,8 @@
 import { ChartContainer } from "@/components/ui";
 import { RecentRecord, YearRecord } from "@/features/player/types/detail";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
+import { useResponsiveChart } from "../hooks/useResponsiveChart";
 
 interface CustomLineChartProps {
   data: RecentRecord[] | YearRecord[];
@@ -16,32 +17,11 @@ interface CustomLineChartProps {
 }
 
 function CustomLineChart({ data, config, XAxisKey }: CustomLineChartProps) {
+  const {
+    config: { fontSize },
+  } = useResponsiveChart();
+
   const activeKey = useMemo(() => Object.keys(config).filter((key) => config[key].isActive)[0], [config]);
-  const [fontSize, setFontSize] = useState("16px");
-
-  if (!data) {
-    return null;
-  }
-
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth < 768) {
-        // 모바일 화면 크기 기준
-        setFontSize("10px");
-      } else {
-        setFontSize("16px");
-      }
-    };
-
-    // 초기 화면 크기 설정
-    handleResize();
-    // 화면 크기 변경 감지
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
 
   return (
     <ChartContainer config={config} className="w-full h-52 mt-4">
