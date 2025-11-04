@@ -4,10 +4,14 @@ const RESPONSIVE_CONFIG = {
   mobile: {
     fontSize: "10px",
     maxBarSize: 18,
+    aspect: 2,
+    cellSize: { width: 18, height: 18 },
   },
   desktop: {
     fontSize: "16px",
     maxBarSize: 40,
+    aspect: 3,
+    cellSize: { width: 30, height: 30 },
   },
 };
 
