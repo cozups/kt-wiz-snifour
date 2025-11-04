@@ -9,11 +9,11 @@ import { TeamRanking } from "./TeamRanking";
 import { useGetBoxscoreQuery } from "@/features/game/apis/boxscore/boxscoreApi.query";
 
 function MatchInfo() {
-  const [gameDate, setGameDate] = useState<string | undefined>(undefined);
-  const [gameKey, setGameKey] = useState<string | undefined>(undefined);
+  const [_gameDate, setGameDate] = useState<string | undefined>(undefined);
+  const [_gameKey, setGameKey] = useState<string | undefined>(undefined);
   const {
     data: recentMatchData,
-    loading: recentLoading,
+    isLoading: recentLoading,
     error: recentError,
     isSuccess: recentSuccess,
   } = useGetRecentMatchScheduleQuery();
@@ -23,7 +23,7 @@ function MatchInfo() {
     isLoading: boxscoreLoading,
     error: boxscoreError,
     prefetchBoxscoreQuery,
-  } = useGetBoxscoreQuery(gameDate || "", gameKey || "");
+  } = useGetBoxscoreQuery();
 
   if (recentError || boxscoreError) {
     throw new Error((recentError || boxscoreError)?.toString());

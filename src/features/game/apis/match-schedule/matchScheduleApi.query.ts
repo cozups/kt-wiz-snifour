@@ -28,12 +28,12 @@ export const useGetMatchScheduleQuery = ({ currentMonth, carouselApi, type = "kt
   // 호출할 함수 선택
   const fetchFn =
     type !== "all"
-      ? async (yearMonth: string): Promise<GameSchedule[]> => {
+      ? async (_yearMonth: string): Promise<GameSchedule[]> => {
           // const response = await scheduleApi.getMonthSchedule(yearMonth);
           // return response.data.list;
           return Promise.resolve(data.ktmatches);
         }
-      : async (yearMonth: string): Promise<GameSchedule[]> => {
+      : async (_yearMonth: string): Promise<GameSchedule[]> => {
           // const response = await scheduleApi.getAllMonthSchedule(yearMonth);
           // return response.data.list;
           return Promise.resolve(data.allmatches);

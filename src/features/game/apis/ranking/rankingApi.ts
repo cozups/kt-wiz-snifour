@@ -41,7 +41,7 @@ export const rankingApi = {
     const response = await instance.get(ApiRoutes.PitcherWinTop3, { params });
     return response.data;
   },
-  getKTPitcherRanking: async (params?: RankingDto): Promise<PitcherRankingResponse> => {
+  getKTPitcherRanking: async (_params?: RankingDto): Promise<PitcherRankingResponse> => {
     // const response = await instance.get(ApiRoutes.KtPitcherRank, { params });
     // return response.data;
     return Promise.resolve({ data: { list: mockRanking.ktPitcher } });
@@ -60,7 +60,7 @@ export const rankingApi = {
     const response = await instance.get(ApiRoutes.BatterHrTop3, { params });
     return response.data;
   },
-  getKTBatterRanking: async (params?: RankingDto): Promise<BatterRankingResponse> => {
+  getKTBatterRanking: async (_params?: RankingDto): Promise<BatterRankingResponse> => {
     // const response = await instance.get(ApiRoutes.KTBatterRank, { params });
     // return response.data;
     return Promise.resolve({ data: { list: mockRanking.ktBatter } });
