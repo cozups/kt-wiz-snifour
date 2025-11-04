@@ -1,25 +1,20 @@
-import { createListViewItem } from '@/features/media/services';
-import {
-  ListDataType,
-  ListViewType,
-  NewsDetailResponse,
-  NewsResponse,
-} from '@/features/media/types';
-import { Parameter, UseQueryParams, isNotNullish } from '@/lib';
-import { useQuery } from '@tanstack/react-query';
-import { keepPreviousData } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
-import { newsApi } from './NewsApi';
+import { createListViewItem } from "@/features/media/services";
+import { ListDataType, ListViewType, NewsDetailResponse, NewsResponse } from "@/features/media/types";
+import { Parameter, UseQueryParams, isNotNullish } from "@/lib";
+import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData } from "@tanstack/react-query";
+import { AxiosError } from "axios";
+import { newsApi } from "./NewsApi";
+
+import data from "@/assets/data/mockNews.json";
 
 // 쿼리 키 정의
 export const NEWS_API_QUERY_KEY = {
   /** 뉴스 목록 조회 쿼리 키 생성 */
-  GET_LIST: (params?: Parameter<typeof newsApi.getNewsList>) =>
-    ['news-list', params].filter(isNotNullish),
+  GET_LIST: (params?: Parameter<typeof newsApi.getNewsList>) => ["news-list", params].filter(isNotNullish),
 
   /** 특정 뉴스 상세 정보 조회 쿼리 키 생성 */
-  GET_BY_SEQ: (artcSeq: Parameter<typeof newsApi.getNewsBySeq>) =>
-    ['news-by-seq', artcSeq].filter(isNotNullish),
+  GET_BY_SEQ: (artcSeq: Parameter<typeof newsApi.getNewsBySeq>) => ["news-by-seq", artcSeq].filter(isNotNullish),
 };
 
 /**
@@ -38,13 +33,12 @@ export function useGetNewsList(
   return useQuery({
     queryKey: NEWS_API_QUERY_KEY.GET_LIST(params?.variables),
     queryFn: async () => {
-      const response = await newsApi.getNewsList(params?.variables);
-      return response;
+      // const response = await newsApi.getNewsList(params?.variables);
+      // return response;
+      return Promise.resolve({ data: { list: data, searchCount: 1 } });
     },
     select: (res: NewsResponse): ListDataType => ({
-      list: res.data.list
-        .filter((item) => item.useYn === 'Y')
-        .map(createListViewItem),
+      list: res.data.list.filter((item) => item.useYn === "Y").map(createListViewItem),
       searchCount: res.data.searchCount,
     }),
     placeholderData: keepPreviousData, // 페이지 네이션이 있을 경우에는 추가해주세요. 이전 데이터를 유지해줍니다.
@@ -69,8 +63,9 @@ export function useGetNewsBySeq(
   return useQuery({
     queryKey,
     queryFn: async () => {
-      const response = await newsApi.getNewsBySeq(params.variables);
-      return response;
+      // const response = await newsApi.getNewsBySeq(params.variables);
+      // return response;
+      return Promise.resolve({ data: { article: data[0] } });
     },
     select: (res: NewsDetailResponse) => createListViewItem(res.data.article),
     ...params.options,
