@@ -1,4 +1,5 @@
-import { CustomBarChart, DataTable, TeamBatterRank, TeamPitcherRank } from "@/features/common";
+import { ChartLabelList, CustomBarChart, DataTable, TeamBatterRank, TeamPitcherRank } from "@/features/common";
+import { useChartConfig } from "@/features/common/hooks/useChartConfig";
 import { Config } from "@/features/player";
 import { RecentRecord, YearRecord } from "@/features/player/types/detail";
 import { cn } from "@/lib/utils";
@@ -22,6 +23,7 @@ function TeamRankingView<T>({
   isLoading = false,
   domain,
 }: TeamRankingViewProps<T>) {
+  const { chartConfig: config, toggleConfig } = useChartConfig(chartConfig);
   const [selectedTab, setSelectedTab] = useState<"table" | "chart">("table");
 
   return (
@@ -50,7 +52,10 @@ function TeamRankingView<T>({
       {selectedTab === "table" ? (
         <DataTable data={tableData} columns={columns} isLoading={isLoading} domain={domain} />
       ) : (
-        <CustomBarChart data={chartData} config={chartConfig} XAxisKey="teamName" domain="all" showConfig />
+        <>
+          <CustomBarChart data={chartData} config={config} XAxisKey="teamName" domain="all" />
+          <ChartLabelList config={config} onClick={toggleConfig} />
+        </>
       )}
     </div>
   );
