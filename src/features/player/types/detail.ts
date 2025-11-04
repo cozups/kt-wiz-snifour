@@ -1,15 +1,15 @@
 export interface GameRecord {
-  displayDate: string; // 경기 일자
-  matchTeamCode: string; // 상대팀 코드
-  matchTeamName: string; // 상대팀 이름
+  displayDate?: string; // 경기 일자
+  matchTeamCode?: string; // 상대팀 코드
+  matchTeamName?: string; // 상대팀 이름
   bb: number; // 볼넷
   hit: number; // 안타
   hr: number; // 홈런
   hp: number; // 몸에 맞는 볼
-  r: number; // 득점
-  sv: number; // 세이브
-  wl: string; // 승패 (예: "W", "L")
-  wls: string; // 승패 상태 (예: "W", "L", "S")
+  r?: number; // 득점
+  sv?: number; // 세이브
+  wl?: string; // 승패 (예: "W", "L")
+  wls?: string; // 승패 상태 (예: "W", "L", "S")
   oavg?: string; // 상대 타율 (투수 전용 필드)
   inn2?: number; // 투구 이닝 (투수 전용 필드)
   innDisplay?: string; // 투구 이닝 표시 (투수 전용 필드, 예: "1 1/3")

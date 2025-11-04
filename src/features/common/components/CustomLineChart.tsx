@@ -1,7 +1,7 @@
-import { ChartContainer } from '@/components/ui';
-import { RecentRecord, YearRecord } from '@/features/player/types/detail';
-import { useEffect, useState } from 'react';
-import { CartesianGrid, Line, LineChart, XAxis, YAxis } from 'recharts';
+import { ChartContainer } from "@/components/ui";
+import { RecentRecord, YearRecord } from "@/features/player/types/detail";
+import { useEffect, useMemo, useState } from "react";
+import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
 
 interface CustomLineChartProps {
   data: RecentRecord[] | YearRecord[];
@@ -16,10 +16,8 @@ interface CustomLineChartProps {
 }
 
 function CustomLineChart({ data, config, XAxisKey }: CustomLineChartProps) {
-  const activeKey = Object.keys(config).filter(
-    (key) => config[key].isActive
-  )[0];
-  const [fontSize, setFontSize] = useState('16px');
+  const activeKey = useMemo(() => Object.keys(config).filter((key) => config[key].isActive)[0], [config]);
+  const [fontSize, setFontSize] = useState("16px");
 
   if (!data) {
     return null;
@@ -29,19 +27,19 @@ function CustomLineChart({ data, config, XAxisKey }: CustomLineChartProps) {
     const handleResize = () => {
       if (window.innerWidth < 768) {
         // 모바일 화면 크기 기준
-        setFontSize('10px');
+        setFontSize("10px");
       } else {
-        setFontSize('16px');
+        setFontSize("16px");
       }
     };
 
     // 초기 화면 크기 설정
     handleResize();
     // 화면 크기 변경 감지
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
 
     return () => {
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener("resize", handleResize);
     };
   }, []);
 
@@ -49,12 +47,7 @@ function CustomLineChart({ data, config, XAxisKey }: CustomLineChartProps) {
     <ChartContainer config={config} className="w-full h-52 mt-4">
       <LineChart accessibilityLayer data={data}>
         <CartesianGrid vertical={false} strokeOpacity={0.1} />
-        <XAxis
-          dataKey={XAxisKey}
-          tickLine={false}
-          axisLine={false}
-          tick={{ fontSize }}
-        />
+        <XAxis dataKey={XAxisKey} tickLine={false} axisLine={false} tick={{ fontSize }} />
         <YAxis
           tickLine={false}
           axisLine={false}
@@ -78,7 +71,7 @@ function CustomLineChart({ data, config, XAxisKey }: CustomLineChartProps) {
           stroke={`var(--color-${activeKey})`}
           strokeWidth={3}
           dot={{ fill: `var(--color-${activeKey})` }}
-          label={{ position: 'top', fontSize }}
+          label={{ position: "top", fontSize }}
         />
       </LineChart>
     </ChartContainer>

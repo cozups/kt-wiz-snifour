@@ -1,32 +1,33 @@
-import { useGetPlayerDetail } from '@/features/player/apis/playerApi.query';
-import { useParams, useSearchParams } from 'react-router';
+import { PLAYER_API_QUERY_KEY } from "@/features/player/apis/playerApi.query";
+import { useQuery } from "@tanstack/react-query";
+import { useParams, useSearchParams } from "react-router";
+// import { playerApi } from "../apis/playerApi";
 
+import pitcherData from "@/assets/data/__test__/pitcher/강건.json";
+import batterData from "@/assets/data/__test__/infielder/강백호.json";
 export const usePlayer = () => {
   const { position } = useParams();
   const [searchParams] = useSearchParams();
-  const pcode = searchParams.get('pcode') ?? '';
-
-  if (!position) {
-    return { player: null, loading: false, error: 'position이 없습니다.' };
-  }
-
-  if (!pcode.length) {
-    return { player: null, loading: false, error: 'pcode가 없습니다.' };
-  }
+  const pcode = searchParams.get("pcode") ?? "";
 
   const variables = {
     position,
     pcode,
   };
 
-  const {
-    data: player,
-    isLoading,
-    isError,
-    error,
-  } = useGetPlayerDetail({
-    variables,
+  return useQuery({
+    queryKey: PLAYER_API_QUERY_KEY.GET_PLAYER_DETAIL(variables),
+    queryFn: async () => {
+      // const response = await playerApi.getPlayerDetail(variables);
+      // return response;
+      if (position === "pitcher") {
+        return pitcherData;
+      }
+      return batterData;
+    },
+    select: (data) => {
+      return data.data;
+    },
+    enabled: !!position && !!pcode,
   });
-
-  return { player, isLoading, isError, error };
 };

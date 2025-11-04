@@ -1,7 +1,7 @@
 import { ChartContainer } from "@/components/ui";
-import { ChartLabelList, TeamBatterRank, TeamPitcherRank } from "@/features/common";
+import { TeamBatterRank, TeamPitcherRank } from "@/features/common";
 import { RecentRecord, YearRecord } from "@/features/player/types/detail";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Bar, BarChart, CartesianGrid, Cell, XAxis, YAxis } from "recharts";
 
 interface Config {
@@ -18,14 +18,12 @@ interface CustomBarChartProps {
   config: Config;
   XAxisKey: string;
   domain?: "kt" | "all";
-  showConfig?: boolean;
 }
 
-function CustomBarChart({ data, config, XAxisKey, domain, showConfig }: CustomBarChartProps) {
-  const [activeKey, setActiveKey] = useState<keyof Config>(Object.keys(config)[0]);
+function CustomBarChart({ data, config, XAxisKey, domain }: CustomBarChartProps) {
+  const activeKey = useMemo(() => Object.keys(config).filter((key) => config[key].isActive)[0], [config]);
   const [fontSize, setFontSize] = useState("16px");
   const [maxBarSize, setMaxBarSize] = useState(40);
-  const [chartConfig, setChartConfig] = useState<Config>(config);
 
   if (!data) {
     return null;
@@ -54,16 +52,16 @@ function CustomBarChart({ data, config, XAxisKey, domain, showConfig }: CustomBa
   }, []);
 
   // 차트 아래 지표 선택을 관리하는 함수
-  const handleConfig = (dataKey: keyof Config) => {
-    setActiveKey(dataKey);
-    setChartConfig((prev) => {
-      if (prev[dataKey].isActive) return prev;
+  // const handleConfig = (dataKey: keyof Config) => {
+  //   setActiveKey(dataKey);
+  //   setChartConfig((prev) => {
+  //     if (prev[dataKey].isActive) return prev;
 
-      return Object.fromEntries(
-        Object.entries(prev).map(([key, value]) => [key, { ...value, isActive: key === dataKey }])
-      );
-    });
-  };
+  //     return Object.fromEntries(
+  //       Object.entries(prev).map(([key, value]) => [key, { ...value, isActive: key === dataKey }])
+  //     );
+  //   });
+  // };
 
   return (
     <div>
@@ -105,8 +103,6 @@ function CustomBarChart({ data, config, XAxisKey, domain, showConfig }: CustomBa
           </Bar>
         </BarChart>
       </ChartContainer>
-
-      {showConfig && <ChartLabelList config={chartConfig} onClick={handleConfig} />}
     </div>
   );
 }

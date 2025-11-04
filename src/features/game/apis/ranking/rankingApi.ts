@@ -10,6 +10,8 @@ import {
   TeamVSResponse,
 } from "@/features/game";
 
+import mockRanking from "@/assets/data/__test__/mockRanking.json";
+
 // ranking api
 export const rankingApi = {
   // 팀
@@ -40,8 +42,9 @@ export const rankingApi = {
     return response.data;
   },
   getKTPitcherRanking: async (params?: RankingDto): Promise<PitcherRankingResponse> => {
-    const response = await instance.get(ApiRoutes.KtPitcherRank, { params });
-    return response.data;
+    // const response = await instance.get(ApiRoutes.KtPitcherRank, { params });
+    // return response.data;
+    return Promise.resolve({ data: { list: mockRanking.ktPitcher } });
   },
   getAllPitcherRanking: async (params?: RankingDto): Promise<PitcherRankingResponse> => {
     const response = await instance.get(ApiRoutes.AllPitcherRank, { params });
@@ -58,8 +61,9 @@ export const rankingApi = {
     return response.data;
   },
   getKTBatterRanking: async (params?: RankingDto): Promise<BatterRankingResponse> => {
-    const response = await instance.get(ApiRoutes.KTBatterRank, { params });
-    return response.data;
+    // const response = await instance.get(ApiRoutes.KTBatterRank, { params });
+    // return response.data;
+    return Promise.resolve({ data: { list: mockRanking.ktBatter } });
   },
   getAllBatterRanking: async (params?: RankingDto): Promise<BatterRankingResponse> => {
     const response = await instance.get(ApiRoutes.AllBatterRank, { params });
