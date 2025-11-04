@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link, useLocation, useParams } from "react-router";
 import { ErrorBoundary } from "react-error-boundary";
 
@@ -9,6 +9,7 @@ import { Banner, Breadcrumb } from "@/features/common";
 import { ErrorFallback } from "@/features/common/components/ErrorFallback";
 import { PlayerList } from "@/features/player";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 const PAGE_CONFIG = {
   coach: {
@@ -47,6 +48,15 @@ function SubTab({ link, children }: { link: string; children: React.ReactNode })
 
 function PlayerListPage() {
   const { position } = useParams();
+
+  useEffect(() => {
+    toast.info(
+      <div>
+        <b>임시 데이터로 대체하여 한 명의 선수 데이터만 조회 가능합니다.</b>
+        <p>투수 - 강건 / 타자 - 강백호</p>
+      </div>
+    );
+  }, []);
 
   const isBatter = position && ["catcher", "infielder", "outfielder"].includes(position);
 

@@ -1,37 +1,38 @@
-import { Button } from '@/components/ui';
-import { useEffect, useState } from 'react';
-import Chatbot from 'react-chatbot-kit';
-import 'react-chatbot-kit/build/main.css';
-import { BrowserRouter, Route, Routes } from 'react-router';
-import { SignupForm } from './features/auth';
-import { ActionProvider, MessageParser } from './features/chatbot';
-import './features/chatbot/chatbot.css';
-import config from './features/chatbot/config';
-import { Footer, Header, ScrollToTop } from './features/common';
-import HomePage from './pages/HomePage';
-import NotFoundPage from './pages/NotFoundPage';
-import { LoginPage, SignupPage } from './pages/auth';
-import RegularGamePage from './pages/game/regular/RegularGamePage';
-import KtHistoryPage from './pages/ktwiz/KtHistoryPage';
-import MembershipPolicyPage from './pages/ktwiz/MembershipPolicyPage';
-import WallpaperPage from './pages/ktwiz/WallpaperPage';
-import FirstPitchPage from './pages/media/FirstPitchPage';
-import HighlightPage from './pages/media/HighlightPage';
-import NewsPage from './pages/media/NewsPage';
-import PhotoPage from './pages/media/PhotoPage';
-import StoryPage from './pages/media/StoryPage';
-import FirstPitchDetailPage from './pages/media/id/FirstPitchDetailPage';
-import HighlightDetailPage from './pages/media/id/HighlightDetailPage';
-import NewsDetailPage from './pages/media/id/NewsDetailPage';
-import PressDetailPage from './pages/media/id/PressDetailPage';
-import StoryDetailPage from './pages/media/id/StoryDetailPage';
-import PlayerListPage from './pages/player/PlayerListPage';
-import TeamMemberDetailPage from './pages/player/detail/TeamMemberDetailPage';
-import TicketPurchasePage from './pages/ticketpurchase/TicketPurchasePage';
-import IksanStadiumPage from './pages/wizPark/IksanStadiumPage';
-import ParkIntroPage from './pages/wizPark/ParkIntroPage';
-import ParkLocationPage from './pages/wizPark/ParkLocationPage';
-import ParkingPage from './pages/wizPark/ParkingPage';
+import { Button } from "@/components/ui";
+import { useEffect, useState } from "react";
+import Chatbot from "react-chatbot-kit";
+import "react-chatbot-kit/build/main.css";
+import { BrowserRouter, Route, Routes } from "react-router";
+import { SignupForm } from "./features/auth";
+import { ActionProvider, MessageParser } from "./features/chatbot";
+import "./features/chatbot/chatbot.css";
+import config from "./features/chatbot/config";
+import { Footer, Header, ScrollToTop } from "./features/common";
+import HomePage from "./pages/HomePage";
+import NotFoundPage from "./pages/NotFoundPage";
+import { LoginPage, SignupPage } from "./pages/auth";
+import RegularGamePage from "./pages/game/regular/RegularGamePage";
+import KtHistoryPage from "./pages/ktwiz/KtHistoryPage";
+import MembershipPolicyPage from "./pages/ktwiz/MembershipPolicyPage";
+import WallpaperPage from "./pages/ktwiz/WallpaperPage";
+import FirstPitchPage from "./pages/media/FirstPitchPage";
+import HighlightPage from "./pages/media/HighlightPage";
+import NewsPage from "./pages/media/NewsPage";
+import PhotoPage from "./pages/media/PhotoPage";
+import StoryPage from "./pages/media/StoryPage";
+import FirstPitchDetailPage from "./pages/media/id/FirstPitchDetailPage";
+import HighlightDetailPage from "./pages/media/id/HighlightDetailPage";
+import NewsDetailPage from "./pages/media/id/NewsDetailPage";
+import PressDetailPage from "./pages/media/id/PressDetailPage";
+import StoryDetailPage from "./pages/media/id/StoryDetailPage";
+import PlayerListPage from "./pages/player/PlayerListPage";
+import TeamMemberDetailPage from "./pages/player/detail/TeamMemberDetailPage";
+import TicketPurchasePage from "./pages/ticketpurchase/TicketPurchasePage";
+import IksanStadiumPage from "./pages/wizPark/IksanStadiumPage";
+import ParkIntroPage from "./pages/wizPark/ParkIntroPage";
+import ParkLocationPage from "./pages/wizPark/ParkLocationPage";
+import ParkingPage from "./pages/wizPark/ParkingPage";
+import { Toaster } from "sonner";
 
 function App() {
   const [showChatbot, setShowChatbot] = useState(false);
@@ -40,10 +41,10 @@ function App() {
     const handleCloseChatbot = () => {
       setShowChatbot(false);
     };
-    window.addEventListener('closeChatbot', handleCloseChatbot);
+    window.addEventListener("closeChatbot", handleCloseChatbot);
 
     return () => {
-      window.removeEventListener('closeChatbot', handleCloseChatbot);
+      window.removeEventListener("closeChatbot", handleCloseChatbot);
     };
   }, []);
 
@@ -68,14 +69,8 @@ function App() {
             <Route path="/ktwiz/wallpaper" element={<WallpaperPage />} />
             <Route path="/ktwiz/about" element={<KtHistoryPage />} />
             <Route path="/ktwiz/history" element={<KtHistoryPage />} />
-            <Route
-              path="/ktwiz/policy/regular"
-              element={<MembershipPolicyPage />}
-            />
-            <Route
-              path="/ktwiz/policy/donation"
-              element={<MembershipPolicyPage />}
-            />
+            <Route path="/ktwiz/policy/regular" element={<MembershipPolicyPage />} />
+            <Route path="/ktwiz/policy/donation" element={<MembershipPolicyPage />} />
 
             {/* Wiz Park */}
             <Route path="/wizpark/intro" element={<ParkIntroPage />} />
@@ -85,19 +80,13 @@ function App() {
 
             {/* Game */}
             <Route path="/game/regular/*" element={<RegularGamePage />} />
-            <Route
-              path="/game/regular/boxscore/:gameDate/:gameKey"
-              element={<RegularGamePage />}
-            />
+            <Route path="/game/regular/boxscore/:gameDate/:gameKey" element={<RegularGamePage />} />
 
             {/* Player */}
             <Route path="/player/:position" element={<PlayerListPage />} />
 
             {/* Player 상세 페이지 경로 */}
-            <Route
-              path="/player/:position/detail"
-              element={<TeamMemberDetailPage />}
-            />
+            <Route path="/player/:position/detail" element={<TeamMemberDetailPage />} />
 
             {/* Media */}
             <Route path="/media/wiznews" element={<NewsPage />} />
@@ -111,20 +100,11 @@ function App() {
             <Route path="/media/wizpress/:id" element={<PressDetailPage />} />
             <Route path="/media/wizstory/:id" element={<StoryDetailPage />} />
             <Route path="/media/photos/:id" element={<PhotoPage />} />
-            <Route
-              path="/media/highlight/:id"
-              element={<HighlightDetailPage />}
-            />
-            <Route
-              path="/media/firstpitch/:id"
-              element={<FirstPitchDetailPage />}
-            />
+            <Route path="/media/highlight/:id" element={<HighlightDetailPage />} />
+            <Route path="/media/firstpitch/:id" element={<FirstPitchDetailPage />} />
 
             {/* Ticketpurchase */}
-            <Route
-              path="/ticket/reservation"
-              element={<TicketPurchasePage />}
-            />
+            <Route path="/ticket/reservation" element={<TicketPurchasePage />} />
             <Route path="/ticket/price" element={<TicketPurchasePage />} />
 
             {/* 404 */}
@@ -147,14 +127,9 @@ function App() {
             챗봇
           </Button>
         )}
-        {showChatbot && (
-          <Chatbot
-            config={config}
-            messageParser={MessageParser}
-            actionProvider={ActionProvider}
-          />
-        )}
+        {showChatbot && <Chatbot config={config} messageParser={MessageParser} actionProvider={ActionProvider} />}
       </div>
+      <Toaster position="top-center" richColors />
     </BrowserRouter>
   );
 }
