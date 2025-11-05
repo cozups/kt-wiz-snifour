@@ -1,10 +1,18 @@
-import { ChartLabelList, CustomBarChart, DataTable, TeamBatterRank, TeamPitcherRank } from "@/features/common";
+import { TeamBatterRank, TeamPitcherRank } from "@/features/common";
+import { DataTable } from "@/features/common/components/table/DataTable";
 import { useChartConfig } from "@/features/common/hooks/useChartConfig";
 import { Config } from "@/features/player";
 import { RecentRecord, YearRecord } from "@/features/player/types/detail";
 import { cn } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
-import { useState } from "react";
+import { lazy, useState } from "react";
+
+const CustomBarChart = lazy(() =>
+  import("@/features/common/components/chart/CustomBarChart").then((module) => ({ default: module.CustomBarChart }))
+);
+const ChartLabelList = lazy(() =>
+  import("@/features/common/components/chart/ChartLabelList").then((module) => ({ default: module.ChartLabelList }))
+);
 
 interface TeamRankingViewProps<T> {
   tableData: T[];

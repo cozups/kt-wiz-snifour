@@ -2,7 +2,7 @@ import { ChartContainer } from "@/components/ui";
 import { TeamBatterRank, TeamPitcherRank } from "@/features/common";
 import { useMemo } from "react";
 import { Bar, BarChart, CartesianGrid, Cell, XAxis, YAxis } from "recharts";
-import { useResponsiveChart } from "../hooks/useResponsiveChart";
+import { useResponsiveChart } from "../../hooks/useResponsiveChart";
 
 interface Config {
   [key: string]: {

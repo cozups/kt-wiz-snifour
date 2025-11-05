@@ -1,6 +1,7 @@
 import { Tabs, TabsContent, TabsList } from "@/components/ui";
 import { seasons } from "@/constants/seasons";
-import { Breadcrumb, CustomSelect, SubTabsTrigger } from "@/features/common";
+import { Breadcrumb, SubTabsTrigger } from "@/features/common";
+import { CustomSelect } from "@/features/common/components/CustomSelect";
 import { ErrorFallback } from "@/features/common/components/ErrorFallback";
 import { PlayerRankingView, RankingCard } from "@/features/game";
 import { cn } from "@/lib/utils";

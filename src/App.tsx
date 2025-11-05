@@ -1,7 +1,7 @@
 import "react-chatbot-kit/build/main.css";
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router";
 import "./features/chatbot/chatbot.css";
-import { Footer, Header, ScrollToTop } from "./features/common";
+import { Footer, ScrollToTop } from "./features/common";
 import HomePage from "./pages/HomePage";
 import { Toaster } from "sonner";
 import { ChatbotButton } from "./components/ChatbotButton";
@@ -14,6 +14,7 @@ import {
   mediaRoutes,
   ticketRoutes,
 } from "./features/common/routes";
+import { Header } from "./features/common/components/header";
 
 const router = createBrowserRouter([
   {

@@ -1,7 +1,7 @@
 import { ChartContainer } from "@/components/ui";
 import { useMemo } from "react";
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
-import { useResponsiveChart } from "../hooks/useResponsiveChart";
+import { useResponsiveChart } from "../../hooks/useResponsiveChart";
 
 interface CustomLineChartProps<T> {
   data: T[];

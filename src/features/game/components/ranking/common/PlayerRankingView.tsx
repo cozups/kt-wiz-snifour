@@ -1,9 +1,10 @@
 import { useSearchParams } from "react-router";
 import { PlayerScatterChart } from "../common/chart/PlayerScatterChart";
-import { OverallBatterRank, OverallPitcherRank, SortableTable } from "@/features/common";
+import { OverallBatterRank, OverallPitcherRank } from "@/features/common";
 import { Filter } from "../common/Filter";
 import { batterColumns, pitcherColumns } from "@/constants/columns/player-rank-colums";
 import { usePlayerRank } from "@/features/game/hooks/ranking/usePlayerRank";
+import { SortableTable } from "@/features/common/components/table/SortableTable";
 
 export function PlayerRankingView({ position, domain }: { position: "pitcher" | "batter"; domain: "kt" | "all" }) {
   const { data: ranking, isLoading, error, isError } = usePlayerRank(position, domain);

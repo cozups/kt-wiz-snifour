@@ -1,6 +1,6 @@
-import { startingPitcherColumns } from '@/constants/columns/starting-pitcher-columns';
-import { DataTable } from '@/features/common';
-import { StartingPitcher } from '../../types/watch-point';
+import { startingPitcherColumns } from "@/constants/columns/starting-pitcher-columns";
+import { DataTable } from "@/features/common/components/table/DataTable";
+import { StartingPitcher } from "../../types/watch-point";
 
 interface StartingPitcherProps {
   homeTeam: string;
@@ -9,16 +9,11 @@ interface StartingPitcherProps {
   visitPitcher?: StartingPitcher;
 }
 
-const StartingPitcherTable = ({
-  homeTeam = '',
-  visitTeam = '',
-  homePitcher,
-  visitPitcher,
-}: StartingPitcherProps) => {
+const StartingPitcherTable = ({ homeTeam = "", visitTeam = "", homePitcher, visitPitcher }: StartingPitcherProps) => {
   const pitcherData = [
     {
-      team: homeTeam || 'Home Team',
-      playerName: homePitcher?.playerName || 'Home Player',
+      team: homeTeam || "Home Team",
+      playerName: homePitcher?.playerName || "Home Player",
       era: homePitcher?.era,
       start: homePitcher?.start,
       w: homePitcher?.w,
@@ -36,8 +31,8 @@ const StartingPitcherTable = ({
       er: homePitcher?.er,
     },
     {
-      team: visitTeam || 'Visit Team',
-      playerName: visitPitcher?.playerName || 'Visit Player',
+      team: visitTeam || "Visit Team",
+      playerName: visitPitcher?.playerName || "Visit Player",
       era: visitPitcher?.era,
       start: visitPitcher?.start,
       w: visitPitcher?.w,
@@ -58,11 +53,7 @@ const StartingPitcherTable = ({
 
   return (
     <div className="overflow-x-auto w-full">
-      <DataTable
-        data={pitcherData}
-        columns={startingPitcherColumns}
-        domain="all"
-      />
+      <DataTable data={pitcherData} columns={startingPitcherColumns} domain="all" />
     </div>
   );
 };

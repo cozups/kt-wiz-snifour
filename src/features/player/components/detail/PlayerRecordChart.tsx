@@ -1,12 +1,23 @@
-import { ChartLabelList, CustomBarChart, CustomLineChart } from "@/features/common";
 import { SubTitle } from "@/features/common";
 import { RecentRecord, YearRecord } from "@/features/player/types/detail";
 import { cn } from "@/lib/utils";
-import { useState } from "react";
+import { lazy, useState } from "react";
 import Skeleton from "react-loading-skeleton";
 import { RecordTableAccordion } from "./RecordTableAccordion";
 import { useChartConfig } from "@/features/common/hooks/useChartConfig";
-import { ChartTypeSelector } from "@/features/common/components/ChartTypeSelector";
+import { ChartTypeSelector } from "@/features/common/components/chart/ChartTypeSelector";
+
+const CustomBarChart = lazy(() =>
+  import("@/features/common/components/chart/CustomBarChart").then((module) => ({ default: module.CustomBarChart }))
+);
+
+const CustomLineChart = lazy(() =>
+  import("@/features/common/components/chart/CustomLineChart").then((module) => ({ default: module.CustomLineChart }))
+);
+
+const ChartLabelList = lazy(() =>
+  import("@/features/common/components/chart/ChartLabelList").then((module) => ({ default: module.ChartLabelList }))
+);
 
 export interface Config {
   [key: string]: {

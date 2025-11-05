@@ -1,5 +1,5 @@
 import { teamRankColums } from "@/constants/columns/team-rank-colums";
-import { DataTable } from "@/features/common";
+import { DataTable } from "@/features/common/components/table/DataTable";
 // import { useTeamRank } from "@/features/game/hooks/ranking/useTeamRank";
 import data from "@/assets/data/__test__/mockRanking.json";
 

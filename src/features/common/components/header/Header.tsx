@@ -1,4 +1,4 @@
-import { MobileHeader, WebHeader } from '@/features/common';
+import { MobileHeader, WebHeader } from "@/features/common/components/header";
 
 function Header() {
   return (

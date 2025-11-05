@@ -1,4 +1,4 @@
-import { DataTable } from "@/features/common";
+import { DataTable } from "@/features/common/components/table/DataTable";
 import { CrowdRankingChart } from "./CrowdRankingChart";
 import { crowdRankColumns } from "@/constants/columns/crowd-columns";
 import { useCrowdRank } from "@/features/game/hooks/ranking";

@@ -4,7 +4,7 @@ import { TEAMVS_ORDER } from "@/constants/team-vs-order";
 import { ArrangedTeamVS, arrangeVS, TeamVSResult } from "@/features/game/services/arrange-vs.service";
 import { cn } from "@/lib/utils";
 import data from "@/assets/data/__test__/mockRanking.json";
-import { TableSkeleton } from "@/features/common/components/TableSkeleton";
+import { TableSkeleton } from "@/features/common/components/table/TableSkeleton";
 
 function TeamVSTable() {
   // const { vs, isLoading, isError, error } = useTeamVS();

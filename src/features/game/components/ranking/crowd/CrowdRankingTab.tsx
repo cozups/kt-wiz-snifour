@@ -1,9 +1,10 @@
 import { seasons } from "@/constants/seasons";
-import { Breadcrumb, CustomSelect, SubTitle } from "@/features/common";
+import { Breadcrumb, SubTitle } from "@/features/common";
 import { useSearchParams } from "react-router";
 import { ErrorFallback } from "@/features/common/components/ErrorFallback";
 import { CrowdRankingView } from "./CrowdRankingView";
 import { ErrorBoundary } from "react-error-boundary";
+import { CustomSelect } from "@/features/common/components/CustomSelect";
 
 function CrowdRankingTab() {
   const [searchParams, setSearchParams] = useSearchParams();
