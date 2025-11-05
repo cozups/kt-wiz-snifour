@@ -1,7 +1,7 @@
 import { SubTitle } from "@/features/common";
 import { RecentRecord, YearRecord } from "@/features/player/types/detail";
 import { cn } from "@/lib/utils";
-import { lazy, useState } from "react";
+import { lazy, Suspense, useState } from "react";
 import Skeleton from "react-loading-skeleton";
 import { RecordTableAccordion } from "./RecordTableAccordion";
 import { useChartConfig } from "@/features/common/hooks/useChartConfig";
@@ -63,14 +63,16 @@ function PlayerRecordChartRender({
 
   return (
     <div className="w-full">
-      {chartType === "bar" && <CustomBarChart data={data} config={chartConfig} XAxisKey="gyear" />}
-      {chartType === "line" && <CustomLineChart data={data} config={chartConfig} XAxisKey="gyear" />}
-      <div className="flex flex-col items-center justify-center gap-2">
-        <ChartLabelList config={chartConfig} onClick={toggleConfig} />
-        <div className="text-xs text-neutral-400 break-keep text-center">
-          해당 라벨을 클릭하여 데이터 표시 정보를 변경할 수 있습니다.
+      <Suspense fallback={<div className="w-full h-72 bg-transparent" />}>
+        {chartType === "bar" && <CustomBarChart data={data} config={chartConfig} XAxisKey="gyear" />}
+        {chartType === "line" && <CustomLineChart data={data} config={chartConfig} XAxisKey="gyear" />}
+        <div className="flex flex-col items-center justify-center gap-2">
+          <ChartLabelList config={chartConfig} onClick={toggleConfig} />
+          <div className="text-xs text-neutral-400 break-keep text-center">
+            해당 라벨을 클릭하여 데이터 표시 정보를 변경할 수 있습니다.
+          </div>
         </div>
-      </div>
+      </Suspense>
     </div>
   );
 }

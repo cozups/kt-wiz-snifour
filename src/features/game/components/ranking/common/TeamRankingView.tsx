@@ -5,7 +5,7 @@ import { Config } from "@/features/player";
 import { RecentRecord, YearRecord } from "@/features/player/types/detail";
 import { cn } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
-import { lazy, useState } from "react";
+import { lazy, Suspense, useState } from "react";
 
 const CustomBarChart = lazy(() =>
   import("@/features/common/components/chart/CustomBarChart").then((module) => ({ default: module.CustomBarChart }))
@@ -60,10 +60,10 @@ function TeamRankingView<T>({
       {selectedTab === "table" ? (
         <DataTable data={tableData} columns={columns} isLoading={isLoading} domain={domain} />
       ) : (
-        <>
+        <Suspense fallback={<div className="w-full h-96" />}>
           <CustomBarChart data={chartData} config={config} XAxisKey="teamName" domain="all" />
           <ChartLabelList config={config} onClick={toggleConfig} />
-        </>
+        </Suspense>
       )}
     </div>
   );
