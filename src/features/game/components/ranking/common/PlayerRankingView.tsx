@@ -18,11 +18,7 @@ export function PlayerRankingView({ position, domain }: { position: "pitcher" | 
 
   return (
     <div className="flex flex-col">
-      <PlayerScatterChart<OverallPitcherRank | OverallBatterRank>
-        data={ranking || []}
-        position={position}
-        loading={isLoading}
-      />
+      <PlayerScatterChart data={ranking || []} position={position} loading={isLoading} />
       <Filter />
       {position === "pitcher" ? (
         <SortableTable<OverallPitcherRank>
