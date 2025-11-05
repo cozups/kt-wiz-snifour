@@ -1,12 +1,7 @@
-import { Button } from "@/components/ui";
-import { useEffect, useState } from "react";
-import Chatbot from "react-chatbot-kit";
 import "react-chatbot-kit/build/main.css";
 import { BrowserRouter, Route, Routes } from "react-router";
 import { SignupForm } from "./features/auth";
-import { ActionProvider, MessageParser } from "./features/chatbot";
 import "./features/chatbot/chatbot.css";
-import config from "./features/chatbot/config";
 import { Footer, Header, ScrollToTop } from "./features/common";
 import HomePage from "./pages/HomePage";
 import NotFoundPage from "./pages/NotFoundPage";
@@ -33,21 +28,9 @@ import ParkIntroPage from "./pages/wizPark/ParkIntroPage";
 import ParkLocationPage from "./pages/wizPark/ParkLocationPage";
 import ParkingPage from "./pages/wizPark/ParkingPage";
 import { Toaster } from "sonner";
+import { ChatbotButton } from "./components/ChatbotButton";
 
 function App() {
-  const [showChatbot, setShowChatbot] = useState(false);
-
-  useEffect(() => {
-    const handleCloseChatbot = () => {
-      setShowChatbot(false);
-    };
-    window.addEventListener("closeChatbot", handleCloseChatbot);
-
-    return () => {
-      window.removeEventListener("closeChatbot", handleCloseChatbot);
-    };
-  }, []);
-
   return (
     <BrowserRouter>
       <ScrollToTop />
@@ -119,15 +102,7 @@ function App() {
         >
           TOP▲
         </div>
-        {!showChatbot && (
-          <Button
-            onClick={() => setShowChatbot(true)}
-            className="w-12 h-12 rounded-full bg-white border fixed bottom-20 right-2 hover:bg-wiz-red hover:text-wiz-white"
-          >
-            챗봇
-          </Button>
-        )}
-        {showChatbot && <Chatbot config={config} messageParser={MessageParser} actionProvider={ActionProvider} />}
+        <ChatbotButton />
       </div>
       <Toaster position="top-center" richColors />
     </BrowserRouter>
