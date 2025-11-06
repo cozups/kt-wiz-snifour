@@ -7,6 +7,8 @@ import MatchInfoCard from "./MatchInfoCard";
 import RecentMatches from "./RecentMatches";
 import { TeamRanking } from "./TeamRanking";
 import { useGetBoxscoreQuery } from "@/features/game/apis/boxscore/boxscoreApi.query";
+import { ErrorBoundary } from "react-error-boundary";
+import { Button } from "@/components/ui/button/button";
 
 function MatchInfo() {
   const [_gameDate, setGameDate] = useState<string | undefined>(undefined);
@@ -69,8 +71,30 @@ function MatchInfo() {
         </MatchInfoCard>
         {/* 사이드 */}
         <div className={cn("w-full h-40 flex", "md:w-[25%] md:border-l md:flex-col md:h-full")}>
-          <TeamRanking />
-          <RecentMatches match={boxscoreData?.schedule.current} />
+          <ErrorBoundary
+            fallbackRender={({ resetErrorBoundary }) => (
+              <div className="w-[40%] h-full flex flex-col items-center justify-center gap-2 md:w-full md:h-[25%] bg-wiz-red text-white">
+                <p className="font-bold">Error!</p>
+                <Button onClick={resetErrorBoundary} className="h-8 bg-white hover:bg-white text-black">
+                  다시 시도
+                </Button>
+              </div>
+            )}
+          >
+            <TeamRanking />
+          </ErrorBoundary>
+          <ErrorBoundary
+            fallbackRender={({ resetErrorBoundary }) => (
+              <div className="w-full h-full flex flex-col items-center justify-center gap-2 md:h-[75%] ">
+                Error!
+                <button onClick={resetErrorBoundary} className="h-8 bg-wiz-black hover:bg-wiz-black text-white">
+                  다시 시도
+                </button>
+              </div>
+            )}
+          >
+            <RecentMatches match={boxscoreData?.schedule.current} />
+          </ErrorBoundary>
         </div>
       </div>
       <div className="flex items-center justify-center my-4">
