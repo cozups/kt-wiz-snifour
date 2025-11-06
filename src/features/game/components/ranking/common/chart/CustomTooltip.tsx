@@ -1,8 +1,8 @@
-import { OverallBatterRank, OverallPitcherRank } from '@/features/common';
-import { CustomIndicator } from '@/features/game';
-import { CrowdRank } from '@/features/game/types/ranking';
-import { useMemo } from 'react';
-import { TooltipProps } from 'recharts';
+import { OverallBatterRank, OverallPitcherRank } from "@/features/common";
+import { CrowdRank } from "@/features/game/types/ranking";
+import { useMemo } from "react";
+import { TooltipProps } from "recharts";
+import { CustomIndicator } from "./CustomIndicator";
 
 type Payload = OverallPitcherRank & OverallBatterRank & CrowdRank;
 
@@ -12,11 +12,10 @@ interface CustomTooltipProps extends TooltipProps<string, string> {
 
 function CustomTooltip({ active, payload, type }: CustomTooltipProps) {
   if (active && payload && payload.length) {
-    const { playerName, era, wra, gamenum, teamName, hra, ops, crowd } =
-      payload[0].payload as Payload;
+    const { playerName, era, wra, gamenum, teamName, hra, ops, crowd } = payload[0].payload as Payload;
 
     const label = useMemo(() => {
-      if (type === 'pitcher' || type === 'batter') {
+      if (type === "pitcher" || type === "batter") {
         return `${playerName}(${teamName})`;
       }
       return teamName;
@@ -28,21 +27,19 @@ function CustomTooltip({ active, payload, type }: CustomTooltipProps) {
           <p className="font-bold ">{label}</p>
           {gamenum && <p className="text-sm">{gamenum}번 출장</p>}
         </div>
-        {type === 'pitcher' && (
+        {type === "pitcher" && (
           <>
             <CustomIndicator indicator="ERA" value={era} />
             <CustomIndicator indicator="승률" value={wra} />
           </>
         )}
-        {type === 'batter' && (
+        {type === "batter" && (
           <>
             <CustomIndicator indicator="타율" value={hra} />
             <CustomIndicator indicator="OPS" value={ops} />
           </>
         )}
-        {type === 'crowd' && (
-          <CustomIndicator indicator="관중" value={crowd.toLocaleString()} />
-        )}
+        {type === "crowd" && <CustomIndicator indicator="관중" value={crowd.toLocaleString()} />}
       </div>
     );
   }

@@ -1,7 +1,9 @@
-import channelsData from "@/assets/data/broadcastChannels.json";
-import { MatchCalendar, MatchInfoCarousel } from "@/features/game";
 import { ErrorBoundary } from "react-error-boundary";
+
+import channelsData from "@/assets/data/broadcastChannels.json";
 import { ErrorFallback } from "../common/components/ErrorFallback";
+import { MatchInfoCarousel } from "./components/carousel/MatchInfoCarousel";
+import { MatchCalendar } from "./components/calender";
 
 const MatchScheduleTab = () => {
   return (

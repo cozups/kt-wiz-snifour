@@ -2,8 +2,10 @@ import { useState } from "react";
 import Skeleton from "react-loading-skeleton";
 
 import { SubTitle } from "@/features/common";
-import { MatchBoard, MatchSummaryTable, StartingPitcherChart, StartingPitcherTable, TeamLineup } from "@/features/game";
 import useGetWatchPointQuery from "./apis/watch-point/watchPointApi.query";
+import { MatchBoard } from "./components/common/MatchBoard";
+import { MatchSummaryTable } from "./components/table";
+import { StartingPitcherChart, StartingPitcherTable, TeamLineup } from "./components/watch-point";
 
 const WatchPointTab = () => {
   const [gameDate, setGameDate] = useState<string | null>(null);

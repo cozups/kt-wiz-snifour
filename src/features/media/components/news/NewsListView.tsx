@@ -1,13 +1,9 @@
-import {
-  ListArticleSkeleton,
-  LoadingView,
-  NewsList,
-  NotFoundSearchResult,
-  Pagination,
-} from '@/features/media';
-import useNewsListQuery from '@/features/media/hooks/news/useNewsListQuery';
-import { usePagination } from '@/features/media/hooks/usePagination';
-import { cn } from '@/lib/utils';
+import { NewsList, NotFoundSearchResult } from "@/features/media";
+import useNewsListQuery from "@/features/media/hooks/news/useNewsListQuery";
+import { usePagination } from "@/features/media/hooks/usePagination";
+import { cn } from "@/lib/utils";
+import { ListArticleSkeleton, LoadingView } from "@/features/media/common/skeleton";
+import { Pagination } from "@/features/media/common/pagination";
 
 const NewsListView = () => {
   const { pageNum, itemCount, onPagination } = usePagination();
@@ -19,12 +15,8 @@ const NewsListView = () => {
   }
 
   return (
-    <div className={cn('min-h-[2200px]')}>
-      <LoadingView
-        isLoading={isLoading}
-        isError={isError}
-        fallback={<ListArticleSkeleton />}
-      >
+    <div className={cn("min-h-[2200px]")}>
+      <LoadingView isLoading={isLoading} isError={isError} fallback={<ListArticleSkeleton />}>
         <NewsList news={newsList?.list || []} />
         <Pagination
           currentPage={pageNum}

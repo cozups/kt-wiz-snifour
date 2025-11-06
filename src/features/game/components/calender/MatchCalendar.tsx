@@ -1,8 +1,8 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui";
 import { ErrorFallback } from "@/features/common/components/ErrorFallback";
-import { CalenderBody } from "@/features/game";
 import { useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
+import { CalenderBody } from "./CalenderBody";
 
 const GAME_TABS_CONFIG = [
   { value: "ktWiz", label: "KT Wiz 경기" },

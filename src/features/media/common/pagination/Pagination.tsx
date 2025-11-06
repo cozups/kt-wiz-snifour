@@ -1,5 +1,6 @@
-import { PaginationList, PaginationSelect } from '@/features/media';
-import { cn } from '@/lib/utils';
+import { cn } from "@/lib/utils";
+import { PaginationSelect } from "./PaginationSelect";
+import { PaginationList } from "./PaginationList";
 
 export type PaginationProps = {
   currentPage: number;
@@ -13,10 +14,10 @@ export type PaginationProps = {
 const Pagination = (props: PaginationProps) => {
   return (
     <>
-      <div className={cn('lg:hidden', props.className)}>
+      <div className={cn("lg:hidden", props.className)}>
         <PaginationSelect {...props} />
       </div>
-      <div className={cn('hidden lg:block', props.className)}>
+      <div className={cn("hidden lg:block", props.className)}>
         <PaginationList {...props} />
       </div>
     </>

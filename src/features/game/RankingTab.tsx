@@ -1,6 +1,11 @@
 import { Tabs, TabsContent, TabsList } from "@/components/ui";
 import { SubTabsTrigger } from "@/features/common";
-import { BatterRankingTab, CrowdRankingTab, PitcherRankingTab, TeamRankingTab } from "@/features/game";
+import {
+  BatterRankingTab,
+  CrowdRankingTab,
+  PitcherRankingTab,
+  TeamRankingTab,
+} from "@/features/game/components/ranking/tabs";
 import { useTabFromUrl } from "@/hooks/useTabFromUrl";
 
 const REG_TABS_CONFIG = [

@@ -1,5 +1,4 @@
 import { Carousel, CarouselApi, CarouselContent, CarouselNext, CarouselPrevious } from "@/components/ui";
-import { CarouselCard } from "@/features/game";
 import useGetRecentMatchScheduleQuery from "@/features/game/apis/match-schedule/RecentScheduleApi.query";
 import { useGetMatchScheduleQuery } from "@/features/game/apis/match-schedule/matchScheduleApi.query";
 import { parseDate, selectTypeAndMonth } from "@/lib/helpers/parse-date";
@@ -7,6 +6,7 @@ import { useMatchStore } from "@/store/useMatchStore";
 import { isValid, parse } from "date-fns";
 import { useEffect, useMemo, useState } from "react";
 import { MatchInfoCarouselSkeleton } from "../skeleton/MatchInfoCarouselSkeleton";
+import { CarouselCard } from "./CarouselCard";
 
 const MatchInfoCarousel = () => {
   const [carouselApi, setCarouselApi] = useState<CarouselApi | null>(null);

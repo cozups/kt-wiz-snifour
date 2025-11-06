@@ -1,12 +1,14 @@
+import React from "react";
 import Skeleton from "react-loading-skeleton";
 
 import { SubTitle } from "@/features/common";
-import { KeyRecordsCard, MatchBoard, MatchScoreTable } from "@/features/game";
+import { MatchScoreTable } from "./components/table";
+import { MatchBoard } from "./components/common/MatchBoard";
+import { DataTable } from "../common/components/table/DataTable";
+import { KeyRecordsCard } from "./components/card/KeyRecordsCard";
 import { useGetBoxscoreQuery } from "./apis/boxscore/boxscoreApi.query";
 import { battingRecordColumns } from "@/constants/columns/batting-record-columns";
 import { pitchingRecordColumns } from "@/constants/columns/pitching-record-columns";
-import React from "react";
-import { DataTable } from "../common/components/table/DataTable";
 
 function RecordSection({ title, children }: { title: string; children: React.ReactNode }) {
   return (

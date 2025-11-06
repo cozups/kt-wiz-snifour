@@ -1,10 +1,11 @@
-import { CalendarHeader, MatchCalendarCell } from "@/features/game";
 import { useMatchStore } from "@/store/useMatchStore";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
 import { DayPicker } from "react-day-picker";
 import { useGetMatchScheduleQuery } from "../../apis/match-schedule/matchScheduleApi.query";
 import Skeleton from "react-loading-skeleton";
+import { MatchCalendarCell } from "./MatchCalendarCell";
+import { CalendarHeader } from "./CalendarHeader";
 
 interface CalenderBodyProps {
   // renderCellContent: (date: Date) => React.ReactNode;

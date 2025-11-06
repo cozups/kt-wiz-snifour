@@ -1,8 +1,14 @@
 import { ErrorBoundary } from "react-error-boundary";
 import { Tabs, TabsContent, TabsList } from "@/components/ui";
 import { Breadcrumb, SubTabsTrigger, SubTitle } from "@/features/common";
-import { TeamBatterRankingView, TeamPitcherRankingView, TeamRankingTable, TeamVSTable } from "@/features/game";
-import { ErrorFallback } from "../../../../common/components/ErrorFallback";
+
+import { ErrorFallback } from "@/features/common/components/ErrorFallback";
+import {
+  TeamBatterRankingView,
+  TeamPitcherRankingView,
+  TeamRankingTable,
+  TeamVSTable,
+} from "@/features/game/components/ranking/team";
 
 const TABS = [
   { value: "team", component: <TeamRankingTable /> },
